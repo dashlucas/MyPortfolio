@@ -126,18 +126,18 @@ const getScaleConfig = (): ScaleConfig => {
   const isMobile = vw < 680;
 
   if (isMobile) {
-    const baseW = 360;
-    const baseH = 490;
-    const availW = Math.max(280, vw - 20);
-    const availH = Math.max(360, vh - 28);
-    const scale = Math.min(availW / baseW, availH / baseH, 1.15);
+    // Fluid responsive width that cleanly fits within mobile viewport with 12px margin on each side
+    const paddingX = 24;
+    const baseW = Math.min(Math.max(280, vw - paddingX), 400);
+    // Dynamic height adapting comfortably to phone vertical height
+    const baseH = Math.min(Math.max(420, vh - 160), 475);
     return {
       isMobile: true,
       baseW,
       baseH,
-      scale,
-      renderedW: Math.round(baseW * scale),
-      renderedH: Math.round(baseH * scale),
+      scale: 1,
+      renderedW: baseW,
+      renderedH: baseH,
     };
   }
 
@@ -269,9 +269,9 @@ export const ProjectsSection: React.FC = () => {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative bg-[#0C0C0C] rounded-t-[32px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-8 sm:-mt-12 md:-mt-14 z-20 px-3 xs:px-4 sm:px-6 md:px-10 pt-14 sm:pt-20 md:pt-24 pb-20 sm:pb-32 select-none"
+      className="relative bg-[#0C0C0C] rounded-t-[32px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-8 sm:-mt-12 md:-mt-14 z-20 px-3 xs:px-4 sm:px-6 md:px-10 pt-14 sm:pt-20 md:pt-24 pb-20 sm:pb-32 select-none overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto w-full flex flex-col items-center">
         {/* Section Heading: Centered "PROJECT" using .hero-heading */}
         <FadeIn delay={0} y={40} className="mb-8 sm:mb-14 md:mb-16 text-center">
           <h2
@@ -283,18 +283,18 @@ export const ProjectsSection: React.FC = () => {
         </FadeIn>
 
         {/* ScrollTrigger Pinned & Stacked Cards Sequence */}
-        <div className="relative flex flex-col">
+        <div className="relative flex flex-col w-full items-center">
           {PROJECTS.map((project, index) => (
             <div
               key={project.number}
               ref={(el) => (cardWrappersRef.current[index] = el)}
-              className="project-card-wrapper min-h-[100vh] flex items-start justify-center relative"
+              className="project-card-wrapper min-h-[100vh] w-full flex items-start justify-center relative"
               style={{ zIndex: (index + 1) * 10 }}
             >
               {/* Pinned Card Box: Exactly renderedW by renderedH, pinned by ScrollTrigger with 0 transform interference */}
               <div
                 ref={(el) => (cardsRef.current[index] = el)}
-                className="project-card-pin will-change-transform flex items-center justify-center relative"
+                className="project-card-pin will-change-transform relative"
                 style={{
                   zIndex: (index + 1) * 10,
                   width: `${scaleConfig.renderedW}px`,
@@ -306,15 +306,15 @@ export const ProjectsSection: React.FC = () => {
                   style={{
                     width: `${scaleConfig.baseW}px`,
                     height: `${scaleConfig.baseH}px`,
-                    transform: `scale(${scaleConfig.scale})`,
+                    transform: scaleConfig.scale !== 1 ? `scale(${scaleConfig.scale})` : undefined,
                     transformOrigin: 'top left',
                   }}
-                  className="flex-shrink-0"
+                  className="w-full h-full"
                 >
                   <article
                     ref={(el) => (cardInnersRef.current[index] = el)}
                     style={{ transformOrigin: 'center center' }}
-                    className="project-card-inner relative w-full h-full flex flex-col justify-between rounded-[24px] sm:rounded-[28px] border border-white/15 bg-[#161616] p-4 sm:p-5 shadow-[0_30px_90px_rgba(0,0,0,0.95)] hover:border-white/25 transition-colors duration-300 will-change-transform overflow-hidden"
+                    className="project-card-inner relative w-full h-full flex flex-col justify-between rounded-[20px] sm:rounded-[28px] border border-white/15 bg-[#161616] p-3.5 sm:p-5 shadow-[0_30px_90px_rgba(0,0,0,0.95)] hover:border-white/25 transition-colors duration-300 will-change-transform overflow-hidden"
                   >
                     {/* Top Specular Edge Highlight */}
                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none z-30" />
@@ -322,26 +322,26 @@ export const ProjectsSection: React.FC = () => {
                     {/* Pseudo-3D Depth Dimming Overlay */}
                     <div
                       ref={(el) => (cardOverlaysRef.current[index] = el)}
-                      className="absolute inset-0 bg-black/60 pointer-events-none rounded-[24px] sm:rounded-[28px] z-30 opacity-0 will-change-[opacity]"
+                      className="absolute inset-0 bg-black/60 pointer-events-none rounded-[20px] sm:rounded-[28px] z-30 opacity-0 will-change-[opacity]"
                     />
 
                     {/* Header: Solid white number, tag + category + title, and LIVE PROJECT ghost pill */}
-                    <div className="relative z-20 flex items-center justify-between gap-3 sm:gap-4 pb-2.5 sm:pb-3 border-b border-white/10 flex-shrink-0">
-                      <div className="flex items-center gap-2.5 sm:gap-4">
-                        <span className="font-black text-2xl sm:text-3xl text-white select-none tracking-tight leading-none">
+                    <div className="relative z-20 flex items-center justify-between gap-2 sm:gap-4 pb-2 sm:pb-3 border-b border-white/10 flex-shrink-0 min-w-0">
+                      <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+                        <span className="font-black text-2xl sm:text-3xl text-white select-none tracking-tight leading-none flex-shrink-0">
                           {project.number}
                         </span>
-                        <div className="flex flex-col gap-0.5">
-                          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                            <span className="text-white/50 uppercase text-[9px] sm:text-[11px] tracking-[0.2em] font-semibold">
+                        <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                            <span className="text-white/50 uppercase text-[9px] sm:text-[11px] tracking-[0.2em] font-semibold flex-shrink-0">
                               {project.tag}
                             </span>
-                            <span className="text-white/20 text-[10px] hidden sm:inline">•</span>
-                            <span className="text-[#D7E2EA]/70 text-[9px] sm:text-[11px] font-medium tracking-wide uppercase truncate max-w-[200px] sm:max-w-[360px]">
+                            <span className="text-white/20 text-[10px] flex-shrink-0">•</span>
+                            <span className="text-[#D7E2EA]/70 text-[9px] sm:text-[11px] font-medium tracking-wide uppercase truncate">
                               {project.category}
                             </span>
                           </div>
-                          <h3 className="text-sm sm:text-lg font-semibold uppercase tracking-wide text-white leading-tight">
+                          <h3 className="text-sm sm:text-lg font-semibold uppercase tracking-wide text-white leading-tight truncate">
                             {project.name}
                           </h3>
                         </div>
@@ -385,10 +385,10 @@ export const ProjectsSection: React.FC = () => {
                         </div>
                       ) : scaleConfig.isMobile ? (
                         /* Mobile 3-Image Layout: 1 Featured Top (16:9) + 2 Bottom Side-by-Side (16:9) */
-                        <div className="flex flex-col gap-2 h-full justify-center">
+                        <div className="flex flex-col gap-2 flex-1 min-h-0 justify-between">
                           <div
                             onClick={() => setSelectedVideo(project)}
-                            className="w-full h-[180px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer"
+                            className="w-full flex-1 min-h-[140px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer"
                           >
                             <img
                               src={project.images?.col2Tall}
@@ -403,7 +403,7 @@ export const ProjectsSection: React.FC = () => {
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-2 h-[92px]">
+                          <div className="grid grid-cols-2 gap-2 h-[82px] xs:h-[90px] flex-shrink-0">
                             <div
                               onClick={() => setSelectedVideo(project)}
                               className="relative rounded-lg overflow-hidden bg-black/40 border border-white/10 group cursor-pointer h-full"

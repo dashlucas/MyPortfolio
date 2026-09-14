@@ -16,10 +16,10 @@ export const LiveProjectButton: React.FC<LiveProjectButtonProps> = ({
   icon,
 }) => {
   const classes = `
-    inline-flex items-center justify-center gap-2 rounded-full border border-white/30 text-white/90
-    font-semibold uppercase tracking-widest px-5 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm
+    inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-full border border-white/30 text-white/90
+    font-semibold uppercase tracking-wider sm:tracking-widest px-3 py-1.5 sm:px-5 sm:py-2 text-[10px] sm:text-xs
     transition-all duration-300 hover:border-white hover:text-white hover:bg-white/10
-    active:scale-95 cursor-pointer select-none whitespace-nowrap group
+    active:scale-95 cursor-pointer select-none whitespace-nowrap group flex-shrink-0
     ${className}
   `.trim();
 
