@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Play, Users, Wrench } from 'lucide-react';
-import { LiveProjectButton } from './LiveProjectButton';
 import { FadeIn } from './FadeIn';
 import { VideoModal } from './VideoModal';
 
@@ -397,7 +396,7 @@ export const ProjectsSection: React.FC = () => {
                       className="absolute inset-0 bg-black/60 pointer-events-none rounded-[20px] sm:rounded-[28px] z-30 opacity-0 will-change-[opacity]"
                     />
 
-                    {/* Header: Solid white number, tag + category + title, team badge, and LIVE PROJECT ghost pill */}
+                    {/* Header: Solid white number, tag + category + title, and team badge */}
                     <div className="relative z-20 flex items-center justify-between gap-2 sm:gap-4 pb-2 sm:pb-3 border-b border-white/10 flex-shrink-0 min-w-0">
                       <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
                         <span className="font-black text-2xl sm:text-3xl text-white select-none tracking-tight leading-none flex-shrink-0">
@@ -413,7 +412,7 @@ export const ProjectsSection: React.FC = () => {
                               {project.category}
                             </span>
                             <span className="text-white/20 text-[10px] flex-shrink-0 hidden xs:inline">•</span>
-                            <span className="inline-flex items-center gap-1 text-emerald-400 text-[9px] sm:text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 flex-shrink-0">
+                            <span className="inline-flex items-center gap-1 text-emerald-400 text-[9px] sm:text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 flex-shrink-0">
                               <Users className="w-3 h-3" />
                               <span>{project.teamSize}</span>
                             </span>
@@ -423,12 +422,6 @@ export const ProjectsSection: React.FC = () => {
                           </h3>
                         </div>
                       </div>
-
-                      <LiveProjectButton
-                        label="LIVE PROJECT"
-                        icon={<Play className="w-3.5 h-3.5 fill-current" />}
-                        onClick={() => setSelectedVideo(project)}
-                      />
                     </div>
 
                     {/* Card Body: Responsive Layout (Side-by-side in Landscape, Stacked in Portrait) */}
@@ -438,10 +431,10 @@ export const ProjectsSection: React.FC = () => {
                         <div className="flex flex-row gap-4 sm:gap-5 h-full min-h-0 items-stretch">
                           {/* Left Column: Media Showcase (Featured 16:9 render + detail thumbnails) */}
                           <div className="w-[52%] flex flex-col gap-2.5 h-full min-h-0 flex-shrink-0">
-                            {/* Main Featured 16:9 Image with Play Trigger */}
+                            {/* Main Featured 16:9 Image with Interactive Play Trigger */}
                             <div
                               onClick={() => setSelectedVideo(project)}
-                              className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0"
+                              className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0 shadow-lg"
                             >
                               <img
                                 src={project.images?.col2Tall || project.singleImage}
@@ -449,10 +442,16 @@ export const ProjectsSection: React.FC = () => {
                                 loading="lazy"
                                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
                               />
-                              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <div className="w-13 h-13 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                                  <Play className="w-5 h-5 fill-white ml-0.5" />
+                              {/* Prominent Play Overlay */}
+                              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
+                                <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-2xl group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
+                                  <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current ml-0.5" />
                                 </div>
+                              </div>
+                              {/* Watch Video indicator badge */}
+                              <div className="absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[10px] text-[#D7E2EA] uppercase tracking-wider font-medium flex items-center gap-1.5 pointer-events-none">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                <span>Watch Video</span>
                               </div>
                             </div>
 
@@ -553,10 +552,10 @@ export const ProjectsSection: React.FC = () => {
                       ) : (
                         /* PORTRAIT VIEW: Stacked (Media on Top, Contributions Text on Bottom) */
                         <div className="flex flex-col gap-2.5 h-full min-h-0">
-                          {/* Top Media Box (16:9 Preview) */}
+                          {/* Top Media Box (16:9 Preview) with Interactive Play Trigger */}
                           <div
                             onClick={() => setSelectedVideo(project)}
-                            className="w-full h-[140px] xs:h-[160px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer flex-shrink-0"
+                            className="w-full h-[145px] xs:h-[165px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer flex-shrink-0 shadow-md"
                           >
                             <img
                               src={project.images?.col2Tall || project.singleImage}
@@ -564,10 +563,16 @@ export const ProjectsSection: React.FC = () => {
                               loading="lazy"
                               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
                             />
-                            <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                              <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl">
-                                <Play className="w-4 h-4 fill-white ml-0.5" />
+                            {/* Prominent Play Overlay */}
+                            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
+                              <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
+                                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" />
                               </div>
+                            </div>
+                            {/* Watch Video indicator badge */}
+                            <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[9px] text-[#D7E2EA] uppercase tracking-wider font-medium flex items-center gap-1 pointer-events-none">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                              <span>Watch Video</span>
                             </div>
                           </div>
 
