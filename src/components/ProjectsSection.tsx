@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Play, Users, Wrench, X } from 'lucide-react';
+import { Play, Users, Wrench, X, Maximize2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FadeIn } from './FadeIn';
 
 export interface ProjectData {
@@ -218,12 +218,52 @@ const getScaleConfig = (): ScaleConfig => {
   };
 };
 
+const getProjectImages = (project: ProjectData): string[] => {
+  if (project.images) {
+    return [project.images.col2Tall, project.images.col1Top, project.images.col1Bottom].filter(Boolean);
+  }
+  if (project.singleImage) {
+    return [project.singleImage];
+  }
+  return [];
+};
+
 export const ProjectsSection: React.FC = () => {
   const [activePlayingIndex, setActivePlayingIndex] = useState<number | null>(null);
   const [selectedImageMap, setSelectedImageMap] = useState<Record<number, string>>({});
+  const [lightboxState, setLightboxState] = useState<{
+    projectIndex: number;
+    imageIndex: number;
+  } | null>(null);
   const [scaleConfig, setScaleConfig] = useState<ScaleConfig>(getScaleConfig);
   const scaleConfigRef = useRef(scaleConfig);
   scaleConfigRef.current = scaleConfig;
+
+  // Keyboard navigation for enlarged image lightbox
+  useEffect(() => {
+    if (!lightboxState) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setLightboxState(null);
+      } else if (e.key === 'ArrowLeft') {
+        setLightboxState((prev) => {
+          if (!prev) return null;
+          const imgs = getProjectImages(PROJECTS[prev.projectIndex]);
+          return { ...prev, imageIndex: (prev.imageIndex - 1 + imgs.length) % imgs.length };
+        });
+      } else if (e.key === 'ArrowRight') {
+        setLightboxState((prev) => {
+          if (!prev) return null;
+          const imgs = getProjectImages(PROJECTS[prev.projectIndex]);
+          return { ...prev, imageIndex: (prev.imageIndex + 1) % imgs.length };
+        });
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxState]);
 
   const sectionRef = useRef<HTMLElement>(null);
   const cardWrappersRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -431,7 +471,7 @@ export const ProjectsSection: React.FC = () => {
                         <div className="flex flex-row gap-4 sm:gap-5 h-full min-h-0 items-stretch">
                           {/* Left Column: Media Showcase (Featured 16:9 render/video + detail thumbnails) */}
                           <div className="w-[52%] flex flex-col gap-2.5 h-full min-h-0 flex-shrink-0">
-                            {/* Main 16:9 Box: Plays video directly in-card when active, or shows preview */}
+                            {/* Main 16:9 Box: Plays video directly in-card when active, or shows clean render */}
                             {activePlayingIndex === index ? (
                               <div className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black border border-white/20 min-h-0 shadow-2xl flex items-center justify-center">
                                 <video
@@ -453,81 +493,105 @@ export const ProjectsSection: React.FC = () => {
                                   title="Return to photo view"
                                 >
                                   <X className="w-3 h-3" />
-                                  <span>Photo</span>
+                                  <span>Close Video</span>
                                 </button>
                               </div>
                             ) : (
-                              <div
-                                onClick={() => setActivePlayingIndex(index)}
-                                className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0 shadow-lg"
-                              >
+                              <div className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black/50 border border-white/10 group min-h-0 shadow-lg">
+                                {/* Clean full-resolution render display */}
                                 <img
                                   src={selectedImageMap[index] || project.images?.col2Tall || project.singleImage}
-                                  alt={`${project.name} preview`}
+                                  alt={`${project.name} render`}
                                   loading="lazy"
-                                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                                  onClick={() => {
+                                    const imgs = getProjectImages(project);
+                                    const activeImg = selectedImageMap[index] || project.images?.col2Tall || project.singleImage || '';
+                                    const currentIdx = imgs.indexOf(activeImg);
+                                    setLightboxState({
+                                      projectIndex: index,
+                                      imageIndex: currentIdx >= 0 ? currentIdx : 0,
+                                    });
+                                  }}
+                                  className="w-full h-full object-cover object-center cursor-zoom-in transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                                 />
-                                {/* Prominent Play Overlay */}
-                                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
-                                  <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-2xl group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
-                                    <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current ml-0.5" />
-                                  </div>
+
+                                {/* Top Controls: Enlarge Fullscreen Button */}
+                                <div className="absolute top-2.5 right-2.5 z-20 flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const imgs = getProjectImages(project);
+                                      const activeImg = selectedImageMap[index] || project.images?.col2Tall || project.singleImage || '';
+                                      const currentIdx = imgs.indexOf(activeImg);
+                                      setLightboxState({
+                                        projectIndex: index,
+                                        imageIndex: currentIdx >= 0 ? currentIdx : 0,
+                                      });
+                                    }}
+                                    className="px-3 py-1 rounded-full bg-black/75 hover:bg-white text-white hover:text-black backdrop-blur-md border border-white/25 text-[10px] uppercase tracking-wider font-semibold flex items-center gap-1.5 transition-all shadow-lg cursor-pointer"
+                                    title="View enlarged image"
+                                  >
+                                    <Maximize2 className="w-3 h-3" />
+                                    <span>Enlarge</span>
+                                  </button>
                                 </div>
-                                {/* Play Video indicator badge */}
-                                <div className="absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[10px] text-[#D7E2EA] uppercase tracking-wider font-medium flex items-center gap-1.5 pointer-events-none">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                  <span>Play Video</span>
+
+                                {/* Bottom Bar: Dedicated "Play Video" Action Button */}
+                                <div className="absolute bottom-2.5 left-2.5 z-20">
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setActivePlayingIndex(index);
+                                    }}
+                                    className="px-3.5 py-1.5 rounded-full bg-black/85 hover:bg-emerald-500 hover:text-black hover:border-emerald-400 backdrop-blur-md border border-white/30 text-[11px] text-white uppercase tracking-wider font-bold flex items-center gap-2 transition-all shadow-2xl cursor-pointer group/btn"
+                                  >
+                                    <Play className="w-3.5 h-3.5 fill-current text-emerald-400 group-hover/btn:text-black transition-colors" />
+                                    <span>Play Video</span>
+                                  </button>
                                 </div>
                               </div>
                             )}
 
-                            {/* Secondary Detail Thumbnails */}
-                            {project.images && (
-                              <div className="grid grid-cols-2 gap-2.5 h-[84px] sm:h-[96px] flex-shrink-0">
-                                <div
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setActivePlayingIndex(null);
-                                    setSelectedImageMap((prev) => ({
-                                      ...prev,
-                                      [index]: project.images!.col1Top,
-                                    }));
-                                  }}
-                                  className={`relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border group cursor-pointer h-full transition-all ${
-                                    selectedImageMap[index] === project.images.col1Top
-                                      ? 'border-white/60 shadow-md ring-1 ring-white/40'
-                                      : 'border-white/10 hover:border-white/30'
-                                  }`}
-                                >
-                                  <img
-                                    src={project.images.col1Top}
-                                    alt={`${project.name} detail 1`}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                                  />
-                                </div>
-                                <div
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setActivePlayingIndex(null);
-                                    setSelectedImageMap((prev) => ({
-                                      ...prev,
-                                      [index]: project.images!.col1Bottom,
-                                    }));
-                                  }}
-                                  className={`relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border group cursor-pointer h-full transition-all ${
-                                    selectedImageMap[index] === project.images.col1Bottom
-                                      ? 'border-white/60 shadow-md ring-1 ring-white/40'
-                                      : 'border-white/10 hover:border-white/30'
-                                  }`}
-                                >
-                                  <img
-                                    src={project.images.col1Bottom}
-                                    alt={`${project.name} detail 2`}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                                  />
-                                </div>
+                            {/* Secondary Detail Thumbnails: Displays all project renders */}
+                            {getProjectImages(project).length > 1 && (
+                              <div
+                                className="grid gap-2.5 h-[80px] sm:h-[90px] flex-shrink-0"
+                                style={{ gridTemplateColumns: `repeat(${getProjectImages(project).length}, minmax(0, 1fr))` }}
+                              >
+                                {getProjectImages(project).map((imgUrl, imgIdx) => {
+                                  const activeImg = selectedImageMap[index] || project.images?.col2Tall || project.singleImage;
+                                  const isSelected = activeImg === imgUrl && activePlayingIndex !== index;
+                                  return (
+                                    <div
+                                      key={imgIdx}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setActivePlayingIndex(null);
+                                        setSelectedImageMap((prev) => ({
+                                          ...prev,
+                                          [index]: imgUrl,
+                                        }));
+                                      }}
+                                      className={`relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border group cursor-pointer h-full transition-all ${
+                                        isSelected
+                                          ? 'border-emerald-400 shadow-md ring-2 ring-emerald-400/50 scale-[1.02]'
+                                          : 'border-white/10 hover:border-white/35 opacity-75 hover:opacity-100'
+                                      }`}
+                                    >
+                                      <img
+                                        src={imgUrl}
+                                        alt={`${project.name} thumbnail ${imgIdx + 1}`}
+                                        loading="lazy"
+                                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                                      />
+                                      <div className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-full bg-black/75 text-white">
+                                        <Maximize2 className="w-2.5 h-2.5" />
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             )}
                           </div>
@@ -599,7 +663,7 @@ export const ProjectsSection: React.FC = () => {
                         </div>
                       ) : (
                         /* PORTRAIT VIEW: Stacked (Media on Top, Contributions Text on Bottom) */
-                        <div className="flex flex-col gap-2.5 h-full min-h-0">
+                        <div className="flex flex-col gap-2 h-full min-h-0">
                           {/* Top Media Box (16:9 Preview / Inline Video) */}
                           {activePlayingIndex === index ? (
                             <div className="w-full h-[155px] xs:h-[185px] relative rounded-xl overflow-hidden bg-black border border-white/20 flex-shrink-0 shadow-xl flex items-center justify-center">
@@ -622,31 +686,101 @@ export const ProjectsSection: React.FC = () => {
                                 title="Return to photo view"
                               >
                                 <X className="w-2.5 h-2.5" />
-                                <span>Photo</span>
+                                <span>Close</span>
                               </button>
                             </div>
                           ) : (
-                            <div
-                              onClick={() => setActivePlayingIndex(index)}
-                              className="w-full h-[145px] xs:h-[165px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer flex-shrink-0 shadow-md"
-                            >
+                            <div className="w-full h-[145px] xs:h-[165px] relative rounded-xl overflow-hidden bg-black/50 border border-white/10 group flex-shrink-0 shadow-md">
                               <img
                                 src={selectedImageMap[index] || project.images?.col2Tall || project.singleImage}
-                                alt={`${project.name} preview`}
+                                alt={`${project.name} render`}
                                 loading="lazy"
-                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                                onClick={() => {
+                                  const imgs = getProjectImages(project);
+                                  const activeImg = selectedImageMap[index] || project.images?.col2Tall || project.singleImage || '';
+                                  const currentIdx = imgs.indexOf(activeImg);
+                                  setLightboxState({
+                                    projectIndex: index,
+                                    imageIndex: currentIdx >= 0 ? currentIdx : 0,
+                                  });
+                                }}
+                                className="w-full h-full object-cover object-center cursor-zoom-in transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                               />
-                              {/* Prominent Play Overlay */}
-                              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
-                                <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
-                                  <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" />
-                                </div>
+
+                              {/* Top-Right Enlarge button */}
+                              <div className="absolute top-2 right-2 z-20">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const imgs = getProjectImages(project);
+                                    const activeImg = selectedImageMap[index] || project.images?.col2Tall || project.singleImage || '';
+                                    const currentIdx = imgs.indexOf(activeImg);
+                                    setLightboxState({
+                                      projectIndex: index,
+                                      imageIndex: currentIdx >= 0 ? currentIdx : 0,
+                                    });
+                                  }}
+                                  className="px-2.5 py-0.5 rounded-full bg-black/75 hover:bg-white text-white/90 hover:text-black backdrop-blur-md border border-white/20 text-[9px] uppercase tracking-wider font-semibold flex items-center gap-1 transition-all shadow-md cursor-pointer"
+                                  title="Enlarge image"
+                                >
+                                  <Maximize2 className="w-2.5 h-2.5" />
+                                  <span>Enlarge</span>
+                                </button>
                               </div>
-                              {/* Play Video indicator badge */}
-                              <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[9px] text-[#D7E2EA] uppercase tracking-wider font-medium flex items-center gap-1 pointer-events-none">
-                                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                <span>Play Video</span>
+
+                              {/* Bottom-Left Play Video button */}
+                              <div className="absolute bottom-2 left-2 z-20">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActivePlayingIndex(index);
+                                  }}
+                                  className="px-2.5 py-1 rounded-full bg-black/80 hover:bg-emerald-500 hover:text-black hover:border-emerald-400 backdrop-blur-md border border-white/25 text-[9px] text-white uppercase tracking-wider font-bold flex items-center gap-1.5 transition-all shadow-lg cursor-pointer"
+                                >
+                                  <Play className="w-3 h-3 fill-current text-emerald-400" />
+                                  <span>Play Video</span>
+                                </button>
                               </div>
+                            </div>
+                          )}
+
+                          {/* Thumbnails Row in portrait */}
+                          {getProjectImages(project).length > 1 && (
+                            <div
+                              className="grid gap-1.5 h-[48px] xs:h-[54px] flex-shrink-0"
+                              style={{ gridTemplateColumns: `repeat(${getProjectImages(project).length}, minmax(0, 1fr))` }}
+                            >
+                              {getProjectImages(project).map((imgUrl, imgIdx) => {
+                                const activeImg = selectedImageMap[index] || project.images?.col2Tall || project.singleImage;
+                                const isSelected = activeImg === imgUrl && activePlayingIndex !== index;
+                                return (
+                                  <div
+                                    key={imgIdx}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setActivePlayingIndex(null);
+                                      setSelectedImageMap((prev) => ({
+                                        ...prev,
+                                        [index]: imgUrl,
+                                      }));
+                                    }}
+                                    className={`relative rounded-lg overflow-hidden bg-black/40 border cursor-pointer h-full transition-all ${
+                                      isSelected
+                                        ? 'border-emerald-400 ring-1 ring-emerald-400/50 scale-[1.02]'
+                                        : 'border-white/10 opacity-70 hover:opacity-100'
+                                    }`}
+                                  >
+                                    <img
+                                      src={imgUrl}
+                                      alt={`${project.name} thumbnail ${imgIdx + 1}`}
+                                      loading="lazy"
+                                      className="w-full h-full object-cover object-center"
+                                    />
+                                  </div>
+                                );
+                              })}
                             </div>
                           )}
 
@@ -716,6 +850,110 @@ export const ProjectsSection: React.FC = () => {
           <div ref={endSpacerRef} className="project-cards-end-spacer h-[70vh] sm:h-[85vh] pointer-events-none" />
         </div>
       </div>
+
+      {/* Full-Screen Image Lightbox Modal */}
+      {lightboxState && (() => {
+        const project = PROJECTS[lightboxState.projectIndex];
+        const images = getProjectImages(project);
+        const currentImg = images[lightboxState.imageIndex] || images[0];
+
+        return (
+          <div
+            className="fixed inset-0 z-[99999] bg-black/92 backdrop-blur-xl flex flex-col items-center justify-center p-3 sm:p-6 select-none animate-fadeIn"
+            onClick={() => setLightboxState(null)}
+          >
+            {/* Top Bar: Project Name, Counter, and Close Button */}
+            <div
+              className="w-full max-w-6xl flex items-center justify-between pb-3 mb-2 border-b border-white/15 flex-shrink-0 z-10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="text-white font-bold text-sm sm:text-base uppercase tracking-wide truncate">
+                  {project.name}
+                </span>
+                <span className="text-emerald-400 text-xs font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25">
+                  {lightboxState.imageIndex + 1} / {images.length}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setLightboxState(null)}
+                className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 text-white text-xs uppercase tracking-wider font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-lg"
+                aria-label="Close image viewer"
+              >
+                <X className="w-4 h-4" />
+                <span className="hidden sm:inline">Close</span>
+              </button>
+            </div>
+
+            {/* Center Viewport with High-Res Image and Previous/Next Controls */}
+            <div
+              className="relative w-full max-w-6xl flex-1 min-h-0 flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={currentImg}
+                alt={`${project.name} high-resolution render`}
+                className="max-w-full max-h-[80vh] object-contain rounded-xl sm:rounded-2xl border border-white/20 shadow-[0_25px_100px_rgba(0,0,0,0.95)]"
+              />
+
+              {/* Previous button */}
+              {images.length > 1 && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightboxState((prev) => {
+                      if (!prev) return null;
+                      return {
+                        ...prev,
+                        imageIndex: (prev.imageIndex - 1 + images.length) % images.length,
+                      };
+                    });
+                  }}
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/75 hover:bg-white text-white hover:text-black border border-white/30 flex items-center justify-center transition-all shadow-2xl cursor-pointer z-10"
+                  aria-label="Previous render"
+                  title="Previous image (Left Arrow)"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+              )}
+
+              {/* Next button */}
+              {images.length > 1 && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightboxState((prev) => {
+                      if (!prev) return null;
+                      return {
+                        ...prev,
+                        imageIndex: (prev.imageIndex + 1) % images.length,
+                      };
+                    });
+                  }}
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/75 hover:bg-white text-white hover:text-black border border-white/30 flex items-center justify-center transition-all shadow-2xl cursor-pointer z-10"
+                  aria-label="Next render"
+                  title="Next image (Right Arrow)"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              )}
+            </div>
+
+            {/* Bottom Bar Hints */}
+            <div
+              className="flex items-center gap-4 pt-2 text-white/40 text-[11px] font-mono tracking-wider flex-shrink-0"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span>Click outside or press ESC to close</span>
+              {images.length > 1 && <span>• Arrow keys to navigate</span>}
+            </div>
+          </div>
+        );
+      })()}
     </section>
   );
 };
