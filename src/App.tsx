@@ -3,7 +3,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import 'lenis/dist/lenis.css';
-import { HeroSection } from './components/HeroSection';
+import { Navbar } from './components/Navbar';
 import { MarqueeSection } from './components/MarqueeSection';
 import { AboutSection } from './components/AboutSection';
 import { ServicesSection } from './components/ServicesSection';
@@ -36,7 +36,7 @@ export const App: React.FC = () => {
     gsap.ticker.add(tickerUpdate);
     gsap.ticker.lagSmoothing(0);
 
-    // Smooth navigation for in-page anchor links (#about, #services, #projects, #contact)
+    // Smooth navigation for in-page anchor links (#about, #services, #projects, #contact, #artstation)
     const handleAnchorClick = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest('a');
       if (!target) return;
@@ -45,7 +45,7 @@ export const App: React.FC = () => {
         e.preventDefault();
         const el = document.querySelector(href);
         if (el) {
-          lenis.scrollTo(el as HTMLElement, { offset: -20 });
+          lenis.scrollTo(el as HTMLElement, { offset: -75 });
         }
       }
     };
@@ -62,13 +62,13 @@ export const App: React.FC = () => {
 
   return (
     <main
-      className="w-full min-h-screen bg-[#0C0C0C] text-[#D7E2EA] font-kanit selection:bg-white selection:text-black"
+      className="w-full min-h-screen bg-[#0C0C0C] text-[#D7E2EA] font-kanit selection:bg-white selection:text-black pt-16 sm:pt-20"
       style={{ overflowX: 'clip' }}
     >
-      {/* 1. Hero Section */}
-      <HeroSection />
+      {/* Navigation Header */}
+      <Navbar />
 
-      {/* 2. Projects Section (O que eu já fiz) */}
+      {/* 1. Projects Section (O que eu já fiz) */}
       <ProjectsSection />
 
       {/* 3. ArtStation 3D Showcase (Projetos do ArtStation) */}

@@ -111,6 +111,20 @@ export const AboutSection: React.FC = () => {
 
           {/* Right Text Column: Badges + Animated Text + Button */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1 max-w-xl">
+            {/* Personal Title & Status */}
+            <FadeIn delay={0.18} y={20} duration={0.8} className="flex flex-col items-center md:items-start mb-4 w-full">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-[11px] sm:text-xs text-emerald-300 font-medium uppercase tracking-wider mb-2.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                <span>Available for Work • Open to Remote & Relocation</span>
+              </div>
+              <h3 className="text-xl xs:text-2xl sm:text-3xl font-bold uppercase tracking-wide text-white">
+                Lucas de Oliveira Martins
+              </h3>
+              <p className="text-xs sm:text-sm text-[#D7E2EA]/70 uppercase tracking-widest font-medium mt-1">
+                Technical Artist & Unreal Engine Engineer
+              </p>
+            </FadeIn>
+
             {/* Badges / Highlights */}
             <FadeIn delay={0.2} y={20} duration={0.8} className="flex flex-wrap justify-center md:justify-start gap-2 sm:gap-2.5 mb-5 sm:mb-6">
               {badges.map((badge, idx) => (

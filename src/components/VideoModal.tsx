@@ -12,6 +12,7 @@ export interface VideoModalProps {
     description?: string;
     teamSize?: string;
     role?: string;
+    contributions?: string[];
     differentials?: string[];
     videoId?: string;
     videoUrl: string;
@@ -201,8 +202,24 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, project
 
               {project.role && (
                 <div className="text-xs sm:text-sm text-white/90 font-medium">
-                  <span className="text-white/40 uppercase text-[10px] tracking-wider mr-2 font-semibold">Role:</span>
+                  <span className="text-white/40 uppercase text-[10px] tracking-wider mr-2 font-semibold">Papel:</span>
                   <span>{project.role}</span>
+                </div>
+              )}
+
+              {project.contributions && project.contributions.length > 0 && (
+                <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
+                  <span className="text-white/50 uppercase text-[10px] sm:text-[11px] tracking-wider font-semibold">
+                    O que desenvolvi no projeto:
+                  </span>
+                  <ul className="flex flex-col gap-2">
+                    {project.contributions.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-[#D7E2EA]/90 leading-relaxed font-light">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0 mt-1.5 shadow-[0_0_6px_#34d399]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
 

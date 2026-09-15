@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Play } from 'lucide-react';
+import { Play, Users, Wrench } from 'lucide-react';
 import { LiveProjectButton } from './LiveProjectButton';
 import { FadeIn } from './FadeIn';
 import { VideoModal } from './VideoModal';
@@ -12,8 +12,9 @@ export interface ProjectData {
   name: string;
   category: string;
   description?: string;
-  teamSize?: string;
-  role?: string;
+  teamSize: string;
+  role: string;
+  contributions: string[];
   differentials?: string[];
   videoId: string;
   videoUrl: string;
@@ -33,11 +34,18 @@ const PROJECTS: ProjectData[] = [
     tag: 'CLIENT',
     name: 'OÁS GT Building',
     category: 'Real Estate VR Arch Viz',
-    teamSize: 'Core Team: 2 developers',
-    role: 'Lead UE Programmer & Tech Artist (~90% Blueprint logic, lighting & VR performance)',
-    differentials: ['Unreal Engine 5', 'Meta Quest VR Walkthrough', 'RenderDoc Profiling', 'LOD & PBR Pipelines'],
+    teamSize: 'Equipe: 4 pessoas',
+    role: 'Technical Artist & Unreal Engine Developer',
+    contributions: [
+      'Modelagem 3D de assets e criação de kits arquitetônicos modulares para o cenário.',
+      'Programação de sistemas avançados de interação com objetos do ambiente.',
+      'Desenvolvimento e programação de widgets e interface gráfica interativa (UI/UX).',
+      'Melhoria e otimização de pipeline: introdução e demonstração prática do uso do Substance 3D e materiais otimizados para redução drástica de draw calls, evidenciando à equipe o impacto direto na taxa de quadros.',
+      'Implementação e replicação do sistema de interações multiplayer em tempo real.',
+    ],
+    differentials: ['Unreal Engine 5', 'Substance 3D Pipeline', 'Draw Calls Optimization', 'Multiplayer Interactions', 'VR Walkthrough'],
     description:
-      'High-end architectural visualization and real estate VR walkthrough in Unreal Engine. Engineered for flawless VR performance by building modular asset kits, custom channel-packed PBR materials, interactive spatial navigation, and optimizing draw calls for silky-smooth framerates on standalone VR.',
+      'Passeio imersivo de arquitetura e visualização imobiliária de alto padrão em Unreal Engine com suporte a VR e multiplayer em tempo real.',
     videoId: 'YHwtTnkM8hM',
     videoUrl: 'https://www.youtube.com/watch?v=YHwtTnkM8hM',
     localVideo: './videos/OAS_GTBuilding.mp4',
@@ -52,11 +60,17 @@ const PROJECTS: ProjectData[] = [
     tag: 'COMMERCIAL',
     name: 'Projeto BRX',
     category: 'High-Performance Multiplatform Experience',
-    teamSize: 'Core Team: 3 developers',
-    role: 'Lead Systems Engineer & Technical Artist (Interactive logic, multiplayer networking & 3D art)',
-    differentials: ['Multiplatform (PC/Tablet)', 'Multiplayer Replication', 'Custom UI/UX Systems', 'Modular 3D Kit'],
+    teamSize: 'Equipe: 6 pessoas',
+    role: 'Lead Systems Engineer & Technical Artist',
+    contributions: [
+      'Implementação de sistema de interações multiplayer com replicação de rede e sincronização de pawns.',
+      'Sistemas complexos de interação e manipulação de objetos interativos no cenário.',
+      'Sistema de controle, navegação e movimentação fluida desenvolvido especificamente para tablet.',
+      'Sistema de câmeras dedicado para o tablet visualizar, acompanhar e alternar pontos de vista dos clientes em tempo real.',
+    ],
+    differentials: ['Multiplayer Replication', 'Tablet Movement System', 'Client Spectator Cameras', 'Multiplatform (PC/Tablet)', 'Custom UI/UX'],
     description:
-      'Interactive multiplatform real-time experience developed for Aeon VR. Architected the complete interactive gameplay logic, multiplayer synchronization, responsive tablet/PC UI systems, and lightweight 3D asset pipelines to run seamlessly across heterogeneous devices.',
+      'Experiência interativa multiplataforma de alta performance com sincronização em rede entre PC e tablets para apresentações interativas de vendas.',
     videoId: 'ZCTbNF5RaJw',
     videoUrl: 'https://www.youtube.com/watch?v=ZCTbNF5RaJw',
     localVideo: './videos/BRX.mp4',
@@ -71,11 +85,15 @@ const PROJECTS: ProjectData[] = [
     tag: 'SIMULATION',
     name: 'Projeto Fitmass',
     category: 'VR & Augmented Reality Simulation',
-    teamSize: 'Core Team: 2 developers',
-    role: 'Lead VR Developer & Pipeline Artist (Biometric avatar rendering & hardware sensor integration)',
-    differentials: ['Meta Quest Standalone', 'Real-Time Avatar Tracking', 'Sensor Integration', 'Zero-Latency UX'],
+    teamSize: 'Equipe: 4 pessoas',
+    role: 'VR Technical Developer & Level Designer',
+    contributions: [
+      'Sistemas de interação e manipulação com objetos em Realidade Virtual com resposta tátil e visual.',
+      'Design do level e composição visual do ambiente espacial voltado para escaneamento e avaliação corporal biométrica.',
+    ],
+    differentials: ['Meta Quest Standalone', 'Level Design', 'Object Interaction System', 'Zero-Latency UX', 'Biometric Simulation'],
     description:
-      'Virtual and Augmented Reality biometric body evaluation system built in Unreal Engine. Delivered real-time interactive 3D avatar visualization, hardware sensor communication, and custom shaders optimized for standalone VR headsets without frame drops.',
+      'Sistema de avaliação biométrica corporal em Realidade Virtual e Aumentada em Unreal Engine com avatares em tempo real.',
     videoId: 'P5yV7_p0bDU',
     videoUrl: 'https://www.youtube.com/watch?v=P5yV7_p0bDU',
     localVideo: './videos/Fitmass.mp4',
@@ -90,11 +108,18 @@ const PROJECTS: ProjectData[] = [
     tag: 'INDUSTRIAL',
     name: 'Fibracem Fábrica',
     category: 'Industrial VR Training & Simulation',
-    teamSize: 'Core Team: 2 developers',
-    role: 'Lead Interactive Developer & Tech Artist (Physics simulation, industrial mechanics & 3D optimization)',
-    differentials: ['Industrial VR Training', 'Physical Interaction Systems', 'Machinery Simulation', 'Assembly QA Workflows'],
+    teamSize: 'Equipe: 6 pessoas',
+    role: 'Lead Interactive Developer & Level Architect',
+    contributions: [
+      'Design e layout espacial dos levels fabris simulados em escala real.',
+      'Arquitetura técnica dos levels e montagem de maquinários e linhas de produção industriais.',
+      'Programação de interações físicas e validação rigorosa de procedimentos operacionais de montagem.',
+      'Programação de lógica de level, checklists e condução guiada de fluxo de treinamento.',
+      'Sistema multiplayer para colaboração e treinamento simultâneo de múltiplos operadores.',
+    ],
+    differentials: ['Industrial VR Training', 'Level Architecture', 'Physical Interaction Systems', 'Multiplayer System', 'Machinery Simulation'],
     description:
-      'Interactive VR factory training and 3D industrial simulation for Fibracem. Modeled and optimized factory machinery, designed physical assembly mechanics, and implemented guided training workflows to validate operator procedures in virtual reality.',
+      'Treinamento e simulação industrial interativa em VR para a fábrica da Fibracem, validando processos técnicos de operadores em ambiente virtual seguro.',
     videoId: 'JgvCpCAwXH4',
     videoUrl: 'https://www.youtube.com/watch?v=JgvCpCAwXH4',
     localVideo: './videos/Fibracem.mp4',
@@ -109,11 +134,16 @@ const PROJECTS: ProjectData[] = [
     tag: 'EXHIBITION',
     name: 'Casacor 2024',
     category: 'Mixed Reality & Spatial Installation',
-    teamSize: 'Core Team: 2 creators',
-    role: 'Technical Director & XR Engineer (Spatial computing, physical-digital synchronization & live deployment)',
-    differentials: ['Mixed Reality (MR)', 'Spatial Computing', 'Live Exhibition Hardware', 'Real-Time Zen FX'],
+    teamSize: 'Equipe: 5 pessoas',
+    role: 'Technical Director & XR Engineer',
+    contributions: [
+      'Sistema de interações imersivas e espaciais para Realidade Mista (MR) em headsets standalone.',
+      'Programação de lógica e fluxo de level em tempo real sincronizado com a iluminação física do evento.',
+      'Sistema multiplayer para presença compartilhada de múltiplos visitantes simultâneos na instalação.',
+    ],
+    differentials: ['Mixed Reality (MR)', 'Spatial Interactions', 'Multiplayer Sync', 'Level Programming', 'Live Exhibition Hardware'],
     description:
-      'Mixed reality and immersive spatial installation developed for CASACOR Santa Catarina. Merged physical architecture and zen environments with interactive virtual elements, deploying live standalone headsets with zero downtime during the exhibition.',
+      'Instalação espacial imersiva em Realidade Mista desenvolvida para a CASACOR Santa Catarina, combinando arquitetura real e virtual.',
     videoId: 'X16uHRK7ew0',
     videoUrl: 'https://www.youtube.com/watch?v=X16uHRK7ew0',
     localVideo: './videos/Casacor2024.mp4',
@@ -127,6 +157,7 @@ const PROJECTS: ProjectData[] = [
 
 interface ScaleConfig {
   isMobile: boolean;
+  isLandscape: boolean;
   baseW: number;
   baseH: number;
   scale: number;
@@ -136,21 +167,31 @@ interface ScaleConfig {
 
 const getScaleConfig = (): ScaleConfig => {
   if (typeof window === 'undefined') {
-    return { isMobile: false, baseW: 1060, baseH: 490, scale: 1, renderedW: 1060, renderedH: 490 };
+    return {
+      isMobile: false,
+      isLandscape: true,
+      baseW: 1080,
+      baseH: 510,
+      scale: 1,
+      renderedW: 1080,
+      renderedH: 510,
+    };
   }
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const isMobile = vw < 680;
+  // Landscape is active on screens with adequate width or when horizontal width dominates
+  const isLandscape = vw >= 768 || (vw > vh && vw >= 560);
+  const isMobile = !isLandscape;
 
   if (isMobile) {
-    // Fluid responsive width that cleanly fits within mobile viewport with 12px margin on each side
-    const paddingX = 24;
-    const baseW = Math.min(Math.max(280, vw - paddingX), 400);
-    // Dynamic height adapting comfortably to phone vertical height
-    const baseH = Math.min(Math.max(420, vh - 160), 475);
+    // Mobile / Portrait view: vertical stack (Media top, Contributions bottom)
+    const paddingX = 20;
+    const baseW = Math.min(Math.max(290, vw - paddingX), 440);
+    const baseH = Math.min(Math.max(500, vh - 120), 620);
     return {
       isMobile: true,
+      isLandscape: false,
       baseW,
       baseH,
       scale: 1,
@@ -159,16 +200,18 @@ const getScaleConfig = (): ScaleConfig => {
     };
   }
 
-  const baseW = 1060;
-  const baseH = 490;
-  const paddingX = vw < 1024 ? 32 : 48;
-  const paddingY = vh < 640 ? 20 : 36;
-  const availW = Math.max(640, vw - paddingX);
-  const availH = Math.max(380, vh - paddingY);
+  // Desktop / Landscape view: side-by-side (Media left, Contributions right)
+  const baseW = 1080;
+  const baseH = 510;
+  const paddingX = vw < 1140 ? 32 : 48;
+  const paddingY = vh < 660 ? 20 : 36;
+  const availW = Math.max(680, vw - paddingX);
+  const availH = Math.max(400, vh - paddingY);
   const scale = Math.min(availW / baseW, availH / baseH, 1.0);
 
   return {
     isMobile: false,
+    isLandscape: true,
     baseW,
     baseH,
     scale,
@@ -213,11 +256,11 @@ export const ProjectsSection: React.FC = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Calculate topOffset to precisely center the card vertically in the user's viewport
+      // Calculate topOffset to center the card vertically in the user's viewport
       const getTopOffset = () => {
         const vh = window.innerHeight;
         const currentRenderedH = scaleConfigRef.current.renderedH;
-        return Math.max(12, Math.round((vh - currentRenderedH) / 2));
+        return Math.max(16, Math.round((vh - currentRenderedH) / 2));
       };
 
       const endTriggerEl = endSpacerRef.current;
@@ -230,9 +273,7 @@ export const ProjectsSection: React.FC = () => {
 
         if (!wrapper || !card || !cardInner) return;
 
-        // 1. PINNING: ALL cards (0 to totalCards - 1) rise and lock in place at topOffset.
-        // They stay pinned until endSpacer reaches topOffset, allowing the final card
-        // (05 - Casacor) its full showcase time before all cards unpin smoothly into the footer.
+        // 1. PINNING: ALL cards rise and pin at topOffset
         ScrollTrigger.create({
           trigger: wrapper,
           start: () => `top ${getTopOffset()}px`,
@@ -244,9 +285,7 @@ export const ProjectsSection: React.FC = () => {
           invalidateOnRefresh: true,
         });
 
-        // 2. SCALE DOWN (1 -> 0.95) & DEPTH OVERLAY (0 -> 0.55):
-        // Exactly as the next card enters the viewport and begins to cover this card,
-        // this card smoothly scales down to ~0.95 and darkens, producing the pseudo-3D recess.
+        // 2. SCALE DOWN & DEPTH OVERLAY when next card covers this card
         const nextWrapper = cardWrappersRef.current[i + 1];
         if (nextWrapper) {
           gsap.to(cardInner, {
@@ -254,8 +293,8 @@ export const ProjectsSection: React.FC = () => {
             ease: 'none',
             scrollTrigger: {
               trigger: nextWrapper,
-              start: 'top bottom', // as next card enters from the bottom of viewport
-              end: () => `top ${getTopOffset()}px`, // when next card reaches pinned position, fully covering this card
+              start: 'top bottom',
+              end: () => `top ${getTopOffset()}px`,
               scrub: true,
               invalidateOnRefresh: true,
             },
@@ -281,7 +320,22 @@ export const ProjectsSection: React.FC = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [scaleConfig.isMobile]);
+  }, [scaleConfig.isMobile, scaleConfig.isLandscape]);
+
+  // Dedicated wheel listener that stops event propagation and scrolls internal container effortlessly
+  const handleInnerWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const container = e.currentTarget;
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    const isScrollingDown = e.deltaY > 0;
+    const isScrollingUp = e.deltaY < 0;
+    const canScrollDown = scrollTop + clientHeight < scrollHeight - 1;
+    const canScrollUp = scrollTop > 1;
+
+    if ((isScrollingDown && canScrollDown) || (isScrollingUp && canScrollUp)) {
+      container.scrollTop += e.deltaY;
+    }
+  };
 
   return (
     <section
@@ -290,13 +344,13 @@ export const ProjectsSection: React.FC = () => {
       className="relative bg-[#0C0C0C] z-10 px-3 xs:px-4 sm:px-6 md:px-10 pt-16 sm:pt-24 md:pt-28 pb-16 sm:pb-28 select-none overflow-hidden"
     >
       <div className="max-w-6xl mx-auto w-full flex flex-col items-center">
-        {/* Section Heading: Centered "PROJECT" using .hero-heading */}
+        {/* Section Heading: Centered "PROJECTS" */}
         <FadeIn delay={0} y={40} className="mb-8 sm:mb-14 md:mb-16 text-center">
           <h2
             style={{ fontSize: 'clamp(2.4rem, 11vw, 150px)' }}
             className="hero-heading font-black uppercase tracking-tight leading-none text-center"
           >
-            PROJECT
+            PROJECTS
           </h2>
         </FadeIn>
 
@@ -309,7 +363,7 @@ export const ProjectsSection: React.FC = () => {
               className="project-card-wrapper min-h-[100vh] w-full flex items-start justify-center relative"
               style={{ zIndex: (index + 1) * 10 }}
             >
-              {/* Pinned Card Box: Exactly renderedW by renderedH, pinned by ScrollTrigger with 0 transform interference */}
+              {/* Pinned Card Box: Exactly renderedW by renderedH, pinned by ScrollTrigger */}
               <div
                 ref={(el) => (cardsRef.current[index] = el)}
                 className="project-card-pin will-change-transform relative"
@@ -332,7 +386,7 @@ export const ProjectsSection: React.FC = () => {
                   <article
                     ref={(el) => (cardInnersRef.current[index] = el)}
                     style={{ transformOrigin: 'center center' }}
-                    className="project-card-inner relative w-full h-full flex flex-col justify-between rounded-[20px] sm:rounded-[28px] border border-white/15 bg-[#161616] p-3.5 sm:p-5 shadow-[0_30px_90px_rgba(0,0,0,0.95)] hover:border-white/25 transition-colors duration-300 will-change-transform overflow-hidden"
+                    className="project-card-inner relative w-full h-full flex flex-col justify-between rounded-[20px] sm:rounded-[28px] border border-white/15 bg-[#161616] p-3 sm:p-5 shadow-[0_30px_90px_rgba(0,0,0,0.95)] hover:border-white/25 transition-colors duration-300 will-change-transform overflow-hidden"
                   >
                     {/* Top Specular Edge Highlight */}
                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none z-30" />
@@ -343,9 +397,9 @@ export const ProjectsSection: React.FC = () => {
                       className="absolute inset-0 bg-black/60 pointer-events-none rounded-[20px] sm:rounded-[28px] z-30 opacity-0 will-change-[opacity]"
                     />
 
-                    {/* Header: Solid white number, tag + category + title, and LIVE PROJECT ghost pill */}
+                    {/* Header: Solid white number, tag + category + title, team badge, and LIVE PROJECT ghost pill */}
                     <div className="relative z-20 flex items-center justify-between gap-2 sm:gap-4 pb-2 sm:pb-3 border-b border-white/10 flex-shrink-0 min-w-0">
-                      <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+                      <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
                         <span className="font-black text-2xl sm:text-3xl text-white select-none tracking-tight leading-none flex-shrink-0">
                           {project.number}
                         </span>
@@ -358,14 +412,11 @@ export const ProjectsSection: React.FC = () => {
                             <span className="text-[#D7E2EA]/70 text-[9px] sm:text-[11px] font-medium tracking-wide uppercase truncate">
                               {project.category}
                             </span>
-                            {project.teamSize && (
-                              <>
-                                <span className="text-white/20 text-[10px] flex-shrink-0 hidden xs:inline">•</span>
-                                <span className="text-emerald-400 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex-shrink-0 hidden xs:inline">
-                                  {project.teamSize}
-                                </span>
-                              </>
-                            )}
+                            <span className="text-white/20 text-[10px] flex-shrink-0 hidden xs:inline">•</span>
+                            <span className="inline-flex items-center gap-1 text-emerald-400 text-[9px] sm:text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 flex-shrink-0">
+                              <Users className="w-3 h-3" />
+                              <span>{project.teamSize}</span>
+                            </span>
                           </div>
                           <h3 className="text-sm sm:text-lg font-semibold uppercase tracking-wide text-white leading-tight truncate">
                             {project.name}
@@ -380,125 +431,197 @@ export const ProjectsSection: React.FC = () => {
                       />
                     </div>
 
-                    {/* Media Area: Designed to present 16:9 images with 0% cropping */}
-                    <div className="relative z-20 w-full flex-1 flex flex-col justify-center min-h-0 pt-2 sm:pt-2.5">
-                      {project.singleImage ? (
-                        /* Single 16:9 Image with ambient glow backdrop (No cropping!) */
-                        <div
-                          onClick={() => setSelectedVideo(project)}
-                          className="w-full h-full relative rounded-xl sm:rounded-2xl overflow-hidden bg-black/50 border border-white/10 group cursor-pointer flex items-center justify-center"
-                        >
-                          {/* Ambient Glow */}
-                          <img
-                            src={project.singleImage}
-                            alt=""
-                            aria-hidden="true"
-                            className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-25 scale-110 pointer-events-none"
-                          />
-                          {/* Crisp 16:9 Uncropped Foreground Image */}
-                          <img
-                            src={project.singleImage}
-                            alt={`${project.name} preview`}
-                            loading="lazy"
-                            className="relative z-10 max-w-full max-h-full object-contain group-hover:scale-[1.02] transition-transform duration-500 ease-out"
-                          />
-                          {/* Play Button Hover Overlay */}
-                          <div className="absolute inset-0 z-20 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                              <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-white ml-0.5" />
+                    {/* Card Body: Responsive Layout (Side-by-side in Landscape, Stacked in Portrait) */}
+                    <div className="relative z-20 w-full flex-1 flex flex-col min-h-0 pt-2 sm:pt-3">
+                      {scaleConfig.isLandscape ? (
+                        /* LANDSCAPE VIEW: Side-by-side (Left Media, Right Contributions Text) */
+                        <div className="flex flex-row gap-4 sm:gap-5 h-full min-h-0 items-stretch">
+                          {/* Left Column: Media Showcase (Featured 16:9 render + detail thumbnails) */}
+                          <div className="w-[52%] flex flex-col gap-2.5 h-full min-h-0 flex-shrink-0">
+                            {/* Main Featured 16:9 Image with Play Trigger */}
+                            <div
+                              onClick={() => setSelectedVideo(project)}
+                              className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0"
+                            >
+                              <img
+                                src={project.images?.col2Tall || project.singleImage}
+                                alt={`${project.name} preview`}
+                                loading="lazy"
+                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                              />
+                              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                <div className="w-13 h-13 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                                  <Play className="w-5 h-5 fill-white ml-0.5" />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Secondary Detail Thumbnails */}
+                            {project.images && (
+                              <div className="grid grid-cols-2 gap-2.5 h-[84px] sm:h-[96px] flex-shrink-0">
+                                <div
+                                  onClick={() => setSelectedVideo(project)}
+                                  className="relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer h-full"
+                                >
+                                  <img
+                                    src={project.images.col1Top}
+                                    alt={`${project.name} detail 1`}
+                                    loading="lazy"
+                                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                                  />
+                                </div>
+                                <div
+                                  onClick={() => setSelectedVideo(project)}
+                                  className="relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer h-full"
+                                >
+                                  <img
+                                    src={project.images.col1Bottom}
+                                    alt={`${project.name} detail 2`}
+                                    loading="lazy"
+                                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Right Column: "O que desenvolvi" / Contributions & Tech Scope Panel */}
+                          <div className="w-[48%] flex flex-col h-full min-h-0 bg-black/35 rounded-xl sm:rounded-2xl border border-white/10 p-3 sm:p-4">
+                            {/* Panel Header */}
+                            <div className="flex items-center justify-between gap-2 pb-2.5 mb-2 border-b border-white/10 flex-shrink-0">
+                              <div className="flex items-center gap-1.5 text-emerald-400">
+                                <Wrench className="w-3.5 h-3.5" />
+                                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider">
+                                  O que desenvolvi no projeto
+                                </span>
+                              </div>
+                              <span className="text-[10px] text-white/40 uppercase tracking-widest font-mono">
+                                Scope & Deliverables
+                              </span>
+                            </div>
+
+                            {/* Scrollable Container with data-lenis-prevent and Dedicated Wheel Handler */}
+                            <div
+                              data-lenis-prevent="true"
+                              onWheel={handleInnerWheel}
+                              className="custom-card-scrollbar overflow-y-auto pr-2 flex-1 min-h-0 flex flex-col gap-3 overscroll-contain select-text"
+                            >
+                              {/* Role */}
+                              <div className="text-xs text-white/90 font-medium">
+                                <span className="text-white/40 uppercase text-[10px] tracking-wider mr-1.5 font-semibold">
+                                  Papel:
+                                </span>
+                                <span>{project.role}</span>
+                              </div>
+
+                              {/* Contributions Bullet List */}
+                              <ul className="flex flex-col gap-2.5">
+                                {project.contributions.map((item, cIdx) => (
+                                  <li
+                                    key={cIdx}
+                                    className="flex items-start gap-2 text-xs sm:text-[13px] text-[#D7E2EA]/90 leading-relaxed font-light"
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0 mt-1.5 shadow-[0_0_6px_#34d399]" />
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+
+                              {/* Differentials / Tech Tags */}
+                              {project.differentials && project.differentials.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5 pt-2 mt-1 border-t border-white/10">
+                                  {project.differentials.map((diff, dIdx) => (
+                                    <span
+                                      key={dIdx}
+                                      className="px-2 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wider bg-white/5 text-[#D7E2EA]/85 border border-white/10"
+                                    >
+                                      {diff}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+
+                              {/* Project Overview Paragraph */}
+                              {project.description && (
+                                <p className="text-[11px] text-[#D7E2EA]/60 font-light leading-relaxed pt-1">
+                                  {project.description}
+                                </p>
+                              )}
                             </div>
                           </div>
                         </div>
-                      ) : scaleConfig.isMobile ? (
-                        /* Mobile 3-Image Layout: 1 Featured Top (16:9) + 2 Bottom Side-by-Side (16:9) */
-                        <div className="flex flex-col gap-2 flex-1 min-h-0 justify-between">
+                      ) : (
+                        /* PORTRAIT VIEW: Stacked (Media on Top, Contributions Text on Bottom) */
+                        <div className="flex flex-col gap-2.5 h-full min-h-0">
+                          {/* Top Media Box (16:9 Preview) */}
                           <div
                             onClick={() => setSelectedVideo(project)}
-                            className="w-full flex-1 min-h-[140px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer"
+                            className="w-full h-[140px] xs:h-[160px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer flex-shrink-0"
                           >
                             <img
-                              src={project.images?.col2Tall}
+                              src={project.images?.col2Tall || project.singleImage}
                               alt={`${project.name} preview`}
                               loading="lazy"
                               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
                             />
-                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                               <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl">
                                 <Play className="w-4 h-4 fill-white ml-0.5" />
                               </div>
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-2 h-[82px] xs:h-[90px] flex-shrink-0">
-                            <div
-                              onClick={() => setSelectedVideo(project)}
-                              className="relative rounded-lg overflow-hidden bg-black/40 border border-white/10 group cursor-pointer h-full"
-                            >
-                              <img
-                                src={project.images?.col1Top}
-                                alt={`${project.name} detail 1`}
-                                loading="lazy"
-                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                              />
-                            </div>
-                            <div
-                              onClick={() => setSelectedVideo(project)}
-                              className="relative rounded-lg overflow-hidden bg-black/40 border border-white/10 group cursor-pointer h-full"
-                            >
-                              <img
-                                src={project.images?.col1Bottom}
-                                alt={`${project.name} detail 2`}
-                                loading="lazy"
-                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        /* Desktop/Tablet 3-Image Layout: Left 2 Stacked 16:9 (1/3 width) + Right Featured 16:9 (2/3 width) */
-                        <div className="flex gap-3 h-full items-stretch">
-                          {/* Left Column: 2 stacked 16:9 images */}
-                          <div className="w-[336px] flex-shrink-0 flex flex-col gap-3 h-full">
-                            <div
-                              onClick={() => setSelectedVideo(project)}
-                              className="flex-1 relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0"
-                            >
-                              <img
-                                src={project.images?.col1Top}
-                                alt={`${project.name} detail 1`}
-                                loading="lazy"
-                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                              />
-                            </div>
-
-                            <div
-                              onClick={() => setSelectedVideo(project)}
-                              className="flex-1 relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0"
-                            >
-                              <img
-                                src={project.images?.col1Bottom}
-                                alt={`${project.name} detail 2`}
-                                loading="lazy"
-                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                              />
-                            </div>
-                          </div>
-
-                          {/* Right Column: 1 featured 16:9 image spanning full height */}
-                          <div
-                            onClick={() => setSelectedVideo(project)}
-                            className="flex-1 relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0"
-                          >
-                            <img
-                              src={project.images?.col2Tall}
-                              alt={`${project.name} featured render`}
-                              loading="lazy"
-                              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                            />
-                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                              <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                                <Play className="w-6 h-6 fill-white ml-0.5" />
+                          {/* Bottom Scrollable Panel: Contributions & Info */}
+                          <div className="flex-1 min-h-0 bg-black/40 rounded-xl border border-white/10 p-3 flex flex-col">
+                            <div className="flex items-center justify-between gap-1 pb-1.5 mb-1.5 border-b border-white/10 flex-shrink-0">
+                              <div className="flex items-center gap-1.5 text-emerald-400">
+                                <Wrench className="w-3 h-3" />
+                                <span className="text-[11px] font-bold uppercase tracking-wider">
+                                  O que desenvolvi
+                                </span>
                               </div>
+                              <span className="text-[9px] text-white/40 uppercase tracking-widest font-mono">
+                                Deliverables
+                              </span>
+                            </div>
+
+                            {/* Scrollable Container with data-lenis-prevent and Dedicated Wheel Handler */}
+                            <div
+                              data-lenis-prevent="true"
+                              onWheel={handleInnerWheel}
+                              className="custom-card-scrollbar overflow-y-auto pr-1.5 flex-1 min-h-0 flex flex-col gap-2 overscroll-contain select-text"
+                            >
+                              <div className="text-[11px] text-white/90 font-medium">
+                                <span className="text-white/40 uppercase text-[9px] tracking-wider mr-1 font-semibold">
+                                  Papel:
+                                </span>
+                                <span>{project.role}</span>
+                              </div>
+
+                              <ul className="flex flex-col gap-2">
+                                {project.contributions.map((item, cIdx) => (
+                                  <li
+                                    key={cIdx}
+                                    className="flex items-start gap-1.5 text-[11px] text-[#D7E2EA]/90 leading-relaxed font-light"
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0 mt-1 shadow-[0_0_6px_#34d399]" />
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+
+                              {project.differentials && project.differentials.length > 0 && (
+                                <div className="flex flex-wrap gap-1 pt-1.5 border-t border-white/10">
+                                  {project.differentials.map((diff, dIdx) => (
+                                    <span
+                                      key={dIdx}
+                                      className="px-2 py-0.5 rounded-full text-[9px] font-medium uppercase tracking-wider bg-white/5 text-[#D7E2EA]/85 border border-white/10"
+                                    >
+                                      {diff}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -510,7 +633,7 @@ export const ProjectsSection: React.FC = () => {
             </div>
           ))}
 
-          {/* End Spacer: Provides scroll distance for the last card (05) to remain pinned and appreciated before unpinning */}
+          {/* End Spacer: Provides scroll distance for the last card (05) to remain pinned before unpinning */}
           <div ref={endSpacerRef} className="project-cards-end-spacer h-[70vh] sm:h-[85vh] pointer-events-none" />
         </div>
       </div>

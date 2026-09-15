@@ -31,6 +31,28 @@ html, body, #root {
   background: #3f434a;
 }
 
+/* Custom card inner scrollbar */
+.custom-card-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.custom-card-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-card-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 9999px;
+}
+.custom-card-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+}
+.custom-card-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
 /* Hero & Section Headings */
 .hero-heading {
   background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
