@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Play, Users, Wrench } from 'lucide-react';
+import { Play, Users, Wrench, X } from 'lucide-react';
 import { FadeIn } from './FadeIn';
-import { VideoModal } from './VideoModal';
 
 export interface ProjectData {
   number: string;
@@ -220,7 +219,8 @@ const getScaleConfig = (): ScaleConfig => {
 };
 
 export const ProjectsSection: React.FC = () => {
-  const [selectedVideo, setSelectedVideo] = useState<ProjectData | null>(null);
+  const [activePlayingIndex, setActivePlayingIndex] = useState<number | null>(null);
+  const [selectedImageMap, setSelectedImageMap] = useState<Record<number, string>>({});
   const [scaleConfig, setScaleConfig] = useState<ScaleConfig>(getScaleConfig);
   const scaleConfigRef = useRef(scaleConfig);
   scaleConfigRef.current = scaleConfig;
@@ -429,38 +429,75 @@ export const ProjectsSection: React.FC = () => {
                       {scaleConfig.isLandscape ? (
                         /* LANDSCAPE VIEW: Side-by-side (Left Media, Right Contributions Text) */
                         <div className="flex flex-row gap-4 sm:gap-5 h-full min-h-0 items-stretch">
-                          {/* Left Column: Media Showcase (Featured 16:9 render + detail thumbnails) */}
+                          {/* Left Column: Media Showcase (Featured 16:9 render/video + detail thumbnails) */}
                           <div className="w-[52%] flex flex-col gap-2.5 h-full min-h-0 flex-shrink-0">
-                            {/* Main Featured 16:9 Image with Interactive Play Trigger */}
-                            <div
-                              onClick={() => setSelectedVideo(project)}
-                              className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0 shadow-lg"
-                            >
-                              <img
-                                src={project.images?.col2Tall || project.singleImage}
-                                alt={`${project.name} preview`}
-                                loading="lazy"
-                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                              />
-                              {/* Prominent Play Overlay */}
-                              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
-                                <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-2xl group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
-                                  <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current ml-0.5" />
+                            {/* Main 16:9 Box: Plays video directly in-card when active, or shows preview */}
+                            {activePlayingIndex === index ? (
+                              <div className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black border border-white/20 min-h-0 shadow-2xl flex items-center justify-center">
+                                <video
+                                  src={project.localVideo}
+                                  controls
+                                  autoPlay
+                                  playsInline
+                                  className="w-full h-full object-contain bg-black"
+                                >
+                                  Your browser does not support the video tag.
+                                </video>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActivePlayingIndex(null);
+                                  }}
+                                  className="absolute top-2.5 right-2.5 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/25 text-[10px] text-[#D7E2EA] hover:text-white hover:bg-white/15 uppercase tracking-wider font-semibold flex items-center gap-1.5 transition-all cursor-pointer z-20 shadow-lg"
+                                  title="Return to photo view"
+                                >
+                                  <X className="w-3 h-3" />
+                                  <span>Photo</span>
+                                </button>
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => setActivePlayingIndex(index)}
+                                className="flex-1 relative rounded-xl sm:rounded-2xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer min-h-0 shadow-lg"
+                              >
+                                <img
+                                  src={selectedImageMap[index] || project.images?.col2Tall || project.singleImage}
+                                  alt={`${project.name} preview`}
+                                  loading="lazy"
+                                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                                />
+                                {/* Prominent Play Overlay */}
+                                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
+                                  <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-2xl group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
+                                    <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current ml-0.5" />
+                                  </div>
+                                </div>
+                                {/* Play Video indicator badge */}
+                                <div className="absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[10px] text-[#D7E2EA] uppercase tracking-wider font-medium flex items-center gap-1.5 pointer-events-none">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                  <span>Play Video</span>
                                 </div>
                               </div>
-                              {/* Watch Video indicator badge */}
-                              <div className="absolute bottom-2.5 left-2.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[10px] text-[#D7E2EA] uppercase tracking-wider font-medium flex items-center gap-1.5 pointer-events-none">
-                                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                <span>Watch Video</span>
-                              </div>
-                            </div>
+                            )}
 
                             {/* Secondary Detail Thumbnails */}
                             {project.images && (
                               <div className="grid grid-cols-2 gap-2.5 h-[84px] sm:h-[96px] flex-shrink-0">
                                 <div
-                                  onClick={() => setSelectedVideo(project)}
-                                  className="relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer h-full"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActivePlayingIndex(null);
+                                    setSelectedImageMap((prev) => ({
+                                      ...prev,
+                                      [index]: project.images!.col1Top,
+                                    }));
+                                  }}
+                                  className={`relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border group cursor-pointer h-full transition-all ${
+                                    selectedImageMap[index] === project.images.col1Top
+                                      ? 'border-white/60 shadow-md ring-1 ring-white/40'
+                                      : 'border-white/10 hover:border-white/30'
+                                  }`}
                                 >
                                   <img
                                     src={project.images.col1Top}
@@ -470,8 +507,19 @@ export const ProjectsSection: React.FC = () => {
                                   />
                                 </div>
                                 <div
-                                  onClick={() => setSelectedVideo(project)}
-                                  className="relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer h-full"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActivePlayingIndex(null);
+                                    setSelectedImageMap((prev) => ({
+                                      ...prev,
+                                      [index]: project.images!.col1Bottom,
+                                    }));
+                                  }}
+                                  className={`relative rounded-lg sm:rounded-xl overflow-hidden bg-black/40 border group cursor-pointer h-full transition-all ${
+                                    selectedImageMap[index] === project.images.col1Bottom
+                                      ? 'border-white/60 shadow-md ring-1 ring-white/40'
+                                      : 'border-white/10 hover:border-white/30'
+                                  }`}
                                 >
                                   <img
                                     src={project.images.col1Bottom}
@@ -552,29 +600,55 @@ export const ProjectsSection: React.FC = () => {
                       ) : (
                         /* PORTRAIT VIEW: Stacked (Media on Top, Contributions Text on Bottom) */
                         <div className="flex flex-col gap-2.5 h-full min-h-0">
-                          {/* Top Media Box (16:9 Preview) with Interactive Play Trigger */}
-                          <div
-                            onClick={() => setSelectedVideo(project)}
-                            className="w-full h-[145px] xs:h-[165px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer flex-shrink-0 shadow-md"
-                          >
-                            <img
-                              src={project.images?.col2Tall || project.singleImage}
-                              alt={`${project.name} preview`}
-                              loading="lazy"
-                              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
-                            />
-                            {/* Prominent Play Overlay */}
-                            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
-                              <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
-                                <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" />
+                          {/* Top Media Box (16:9 Preview / Inline Video) */}
+                          {activePlayingIndex === index ? (
+                            <div className="w-full h-[155px] xs:h-[185px] relative rounded-xl overflow-hidden bg-black border border-white/20 flex-shrink-0 shadow-xl flex items-center justify-center">
+                              <video
+                                src={project.localVideo}
+                                controls
+                                autoPlay
+                                playsInline
+                                className="w-full h-full object-contain bg-black"
+                              >
+                                Your browser does not support the video tag.
+                              </video>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActivePlayingIndex(null);
+                                }}
+                                className="absolute top-2 right-2 px-2.5 py-0.5 rounded-full bg-black/75 backdrop-blur-md border border-white/25 text-[9px] text-[#D7E2EA] hover:text-white hover:bg-white/15 uppercase tracking-wider font-semibold flex items-center gap-1 transition-all cursor-pointer z-20 shadow-md"
+                                title="Return to photo view"
+                              >
+                                <X className="w-2.5 h-2.5" />
+                                <span>Photo</span>
+                              </button>
+                            </div>
+                          ) : (
+                            <div
+                              onClick={() => setActivePlayingIndex(index)}
+                              className="w-full h-[145px] xs:h-[165px] relative rounded-xl overflow-hidden bg-black/40 border border-white/10 group cursor-pointer flex-shrink-0 shadow-md"
+                            >
+                              <img
+                                src={selectedImageMap[index] || project.images?.col2Tall || project.singleImage}
+                                alt={`${project.name} preview`}
+                                loading="lazy"
+                                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                              />
+                              {/* Prominent Play Overlay */}
+                              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300 flex items-center justify-center">
+                                <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-xl group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300">
+                                  <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-current ml-0.5" />
+                                </div>
+                              </div>
+                              {/* Play Video indicator badge */}
+                              <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[9px] text-[#D7E2EA] uppercase tracking-wider font-medium flex items-center gap-1 pointer-events-none">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                <span>Play Video</span>
                               </div>
                             </div>
-                            {/* Watch Video indicator badge */}
-                            <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-[9px] text-[#D7E2EA] uppercase tracking-wider font-medium flex items-center gap-1 pointer-events-none">
-                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                              <span>Watch Video</span>
-                            </div>
-                          </div>
+                          )}
 
                           {/* Bottom Scrollable Panel: Contributions & Info */}
                           <div className="flex-1 min-h-0 bg-black/40 rounded-xl border border-white/10 p-3 flex flex-col">
@@ -642,13 +716,6 @@ export const ProjectsSection: React.FC = () => {
           <div ref={endSpacerRef} className="project-cards-end-spacer h-[70vh] sm:h-[85vh] pointer-events-none" />
         </div>
       </div>
-
-      {/* Interactive Video Player Modal */}
-      <VideoModal
-        isOpen={!!selectedVideo}
-        onClose={() => setSelectedVideo(null)}
-        project={selectedVideo}
-      />
     </section>
   );
 };
