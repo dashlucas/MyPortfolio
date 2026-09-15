@@ -7,9 +7,10 @@ const EASE = [0.25, 0.1, 0.25, 1];
 
 export const HeroSection: React.FC = () => {
   const navItems = [
-    { label: 'About', href: '#about' },
-    { label: 'Services', href: '#services' },
     { label: 'Projects', href: '#projects' },
+    { label: '3D Art', href: '#artstation' },
+    { label: 'Services', href: '#services' },
+    { label: 'About', href: '#about' },
     { label: 'Contact', href: '#contact' },
   ];
 

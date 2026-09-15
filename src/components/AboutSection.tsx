@@ -5,20 +5,21 @@ import { ContactButton } from './ContactButton';
 
 export const AboutSection: React.FC = () => {
   const bioText =
-    "Technical Artist and UE Engineer with 4+ years of experience bridging the gap between art pipelines and engine performance. Specialist in Unreal Engine (C++ / Blueprints), shader authoring, GPU profiling with RenderDoc, and cross-platform optimization for Meta Quest and VR. Delivering high-performance interactive experiences by solving complex rendering bottlenecks and automating art workflows.";
+    "Technical Artist and UE Engineer with a Bachelor's Degree in Graphic Expression from UFPR, bringing 4+ years of production experience bridging the gap between artistic pipelines and high-performance engine architecture. Specialist in Unreal Engine (C++ / Blueprints), custom shader authoring, RenderDoc GPU profiling, and cross-platform VR optimization for Meta Quest. Proven track record delivering complex interactive systems in lean, high-velocity teams (2–3 devs), operating with strict version control discipline (Perforce, Git, Azure DevOps) and modern Agentic AI-accelerated workflows.";
 
   const badges = [
-    'Aeon VR | Tech Artist',
-    '4+ Years Experience',
+    'B.S. Graphic Expression | UFPR',
+    'Technical Artist & UE Engineer',
+    '4+ Years Production Exp.',
     'Meta Quest & VR Optimization',
-    'UFPR Graphic Expression',
+    'Git / Perforce / Azure DevOps',
     'Curitiba (Open to Remote)',
   ];
 
   return (
     <section
       id="about"
-      className="relative min-h-screen flex flex-col justify-center items-center px-4 sm:px-8 md:px-10 py-16 sm:py-20 bg-[#0C0C0C] overflow-hidden select-none"
+      className="relative min-h-screen flex flex-col justify-center items-center px-4 sm:px-8 md:px-10 py-20 sm:py-28 md:py-36 bg-[#0C0C0C] rounded-t-[32px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-8 sm:-mt-12 md:-mt-14 z-20 overflow-hidden select-none shadow-[0_-20px_50px_rgba(0,0,0,0.8)]"
     >
       {/* Corner Decorative 3D Images (Scaled and hidden on narrow screens to prevent text overlap) */}
 

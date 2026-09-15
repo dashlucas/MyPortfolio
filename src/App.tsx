@@ -68,17 +68,17 @@ export const App: React.FC = () => {
       {/* 1. Hero Section */}
       <HeroSection />
 
-      {/* 2. Marquee Section */}
-      <MarqueeSection />
+      {/* 2. Projects Section (O que eu já fiz) */}
+      <ProjectsSection />
 
-      {/* 3. About Section */}
-      <AboutSection />
+      {/* 3. ArtStation 3D Showcase (Projetos do ArtStation) */}
+      <MarqueeSection />
 
       {/* 4. Services Section */}
       <ServicesSection />
 
-      {/* 5. Projects Section */}
-      <ProjectsSection />
+      {/* 5. About Section (Sobre mim) */}
+      <AboutSection />
 
       {/* Contact & Footer Section */}
       <footer id="contact" className="relative bg-[#0C0C0C] text-[#D7E2EA] px-4 sm:px-6 md:px-10 py-16 sm:py-24 md:py-32 border-t border-white/10 select-none">

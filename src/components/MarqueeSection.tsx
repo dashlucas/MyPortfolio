@@ -138,7 +138,8 @@ const ROW_2 = [...ARTWORKS_ROW_2, ...ARTWORKS_ROW_2];
 export const MarqueeSection: React.FC = () => {
   return (
     <section
-      className="relative bg-[#0C0C0C] pt-16 sm:pt-24 md:pt-36 pb-10 sm:pb-14 overflow-hidden select-none"
+      id="artstation"
+      className="relative bg-[#0C0C0C] pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-24 overflow-hidden select-none"
     >
       {/* Top Section Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 mb-6 sm:mb-8 md:mb-10 flex items-center justify-between gap-3">

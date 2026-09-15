@@ -12,6 +12,9 @@ export interface ProjectData {
   name: string;
   category: string;
   description?: string;
+  teamSize?: string;
+  role?: string;
+  differentials?: string[];
   videoId: string;
   videoUrl: string;
   localVideo?: string;
@@ -30,8 +33,11 @@ const PROJECTS: ProjectData[] = [
     tag: 'CLIENT',
     name: 'OÁS GT Building',
     category: 'Real Estate VR Arch Viz',
+    teamSize: 'Core Team: 2 developers',
+    role: 'Lead UE Programmer & Tech Artist (~90% Blueprint logic, lighting & VR performance)',
+    differentials: ['Unreal Engine 5', 'Meta Quest VR Walkthrough', 'RenderDoc Profiling', 'LOD & PBR Pipelines'],
     description:
-      'High-end architectural visualization and real estate VR walkthrough in Unreal Engine, featuring custom lighting, PBR materials, and interactive spatial navigation.',
+      'High-end architectural visualization and real estate VR walkthrough in Unreal Engine. Engineered for flawless VR performance by building modular asset kits, custom channel-packed PBR materials, interactive spatial navigation, and optimizing draw calls for silky-smooth framerates on standalone VR.',
     videoId: 'YHwtTnkM8hM',
     videoUrl: 'https://www.youtube.com/watch?v=YHwtTnkM8hM',
     localVideo: './videos/OAS_GTBuilding.mp4',
@@ -46,8 +52,11 @@ const PROJECTS: ProjectData[] = [
     tag: 'COMMERCIAL',
     name: 'Projeto BRX',
     category: 'High-Performance Multiplatform Experience',
+    teamSize: 'Core Team: 3 developers',
+    role: 'Lead Systems Engineer & Technical Artist (Interactive logic, multiplayer networking & 3D art)',
+    differentials: ['Multiplatform (PC/Tablet)', 'Multiplayer Replication', 'Custom UI/UX Systems', 'Modular 3D Kit'],
     description:
-      'Interactive multiplatform real-time experience developed for Aeon VR, featuring responsive mechanics, optimized 3D pipelines, and high-fidelity rendering across devices.',
+      'Interactive multiplatform real-time experience developed for Aeon VR. Architected the complete interactive gameplay logic, multiplayer synchronization, responsive tablet/PC UI systems, and lightweight 3D asset pipelines to run seamlessly across heterogeneous devices.',
     videoId: 'ZCTbNF5RaJw',
     videoUrl: 'https://www.youtube.com/watch?v=ZCTbNF5RaJw',
     localVideo: './videos/BRX.mp4',
@@ -62,8 +71,11 @@ const PROJECTS: ProjectData[] = [
     tag: 'SIMULATION',
     name: 'Projeto Fitmass',
     category: 'VR & Augmented Reality Simulation',
+    teamSize: 'Core Team: 2 developers',
+    role: 'Lead VR Developer & Pipeline Artist (Biometric avatar rendering & hardware sensor integration)',
+    differentials: ['Meta Quest Standalone', 'Real-Time Avatar Tracking', 'Sensor Integration', 'Zero-Latency UX'],
     description:
-      'Virtual and Augmented Reality biometric body evaluation system built in Unreal Engine, delivering real-time interactive avatar visualization and tracking.',
+      'Virtual and Augmented Reality biometric body evaluation system built in Unreal Engine. Delivered real-time interactive 3D avatar visualization, hardware sensor communication, and custom shaders optimized for standalone VR headsets without frame drops.',
     videoId: 'P5yV7_p0bDU',
     videoUrl: 'https://www.youtube.com/watch?v=P5yV7_p0bDU',
     localVideo: './videos/Fitmass.mp4',
@@ -78,8 +90,11 @@ const PROJECTS: ProjectData[] = [
     tag: 'INDUSTRIAL',
     name: 'Fibracem Fábrica',
     category: 'Industrial VR Training & Simulation',
+    teamSize: 'Core Team: 2 developers',
+    role: 'Lead Interactive Developer & Tech Artist (Physics simulation, industrial mechanics & 3D optimization)',
+    differentials: ['Industrial VR Training', 'Physical Interaction Systems', 'Machinery Simulation', 'Assembly QA Workflows'],
     description:
-      'Interactive VR factory training and 3D industrial simulation for Fibracem, recreating assembly lines, machinery operations, and quality inspection workflows.',
+      'Interactive VR factory training and 3D industrial simulation for Fibracem. Modeled and optimized factory machinery, designed physical assembly mechanics, and implemented guided training workflows to validate operator procedures in virtual reality.',
     videoId: 'JgvCpCAwXH4',
     videoUrl: 'https://www.youtube.com/watch?v=JgvCpCAwXH4',
     localVideo: './videos/Fibracem.mp4',
@@ -94,8 +109,11 @@ const PROJECTS: ProjectData[] = [
     tag: 'EXHIBITION',
     name: 'Casacor 2024',
     category: 'Mixed Reality & Spatial Installation',
+    teamSize: 'Core Team: 2 creators',
+    role: 'Technical Director & XR Engineer (Spatial computing, physical-digital synchronization & live deployment)',
+    differentials: ['Mixed Reality (MR)', 'Spatial Computing', 'Live Exhibition Hardware', 'Real-Time Zen FX'],
     description:
-      'Mixed reality and immersive spatial installation developed for CASACOR Santa Catarina, merging physical architecture and zen environments with interactive virtual elements.',
+      'Mixed reality and immersive spatial installation developed for CASACOR Santa Catarina. Merged physical architecture and zen environments with interactive virtual elements, deploying live standalone headsets with zero downtime during the exhibition.',
     videoId: 'X16uHRK7ew0',
     videoUrl: 'https://www.youtube.com/watch?v=X16uHRK7ew0',
     localVideo: './videos/Casacor2024.mp4',
@@ -269,7 +287,7 @@ export const ProjectsSection: React.FC = () => {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative bg-[#0C0C0C] rounded-t-[32px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-8 sm:-mt-12 md:-mt-14 z-20 px-3 xs:px-4 sm:px-6 md:px-10 pt-14 sm:pt-20 md:pt-24 pb-20 sm:pb-32 select-none overflow-hidden"
+      className="relative bg-[#0C0C0C] z-10 px-3 xs:px-4 sm:px-6 md:px-10 pt-16 sm:pt-24 md:pt-28 pb-16 sm:pb-28 select-none overflow-hidden"
     >
       <div className="max-w-6xl mx-auto w-full flex flex-col items-center">
         {/* Section Heading: Centered "PROJECT" using .hero-heading */}
@@ -332,7 +350,7 @@ export const ProjectsSection: React.FC = () => {
                           {project.number}
                         </span>
                         <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-wrap">
                             <span className="text-white/50 uppercase text-[9px] sm:text-[11px] tracking-[0.2em] font-semibold flex-shrink-0">
                               {project.tag}
                             </span>
@@ -340,6 +358,14 @@ export const ProjectsSection: React.FC = () => {
                             <span className="text-[#D7E2EA]/70 text-[9px] sm:text-[11px] font-medium tracking-wide uppercase truncate">
                               {project.category}
                             </span>
+                            {project.teamSize && (
+                              <>
+                                <span className="text-white/20 text-[10px] flex-shrink-0 hidden xs:inline">•</span>
+                                <span className="text-emerald-400 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex-shrink-0 hidden xs:inline">
+                                  {project.teamSize}
+                                </span>
+                              </>
+                            )}
                           </div>
                           <h3 className="text-sm sm:text-lg font-semibold uppercase tracking-wide text-white leading-tight truncate">
                             {project.name}

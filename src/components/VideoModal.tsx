@@ -10,6 +10,9 @@ export interface VideoModalProps {
     name: string;
     category: string;
     description?: string;
+    teamSize?: string;
+    role?: string;
+    differentials?: string[];
     videoId?: string;
     videoUrl: string;
     localVideo?: string;
@@ -179,21 +182,49 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, project
             </div>
 
             {/* Technical Project Scope & Description */}
-            {project.description && (
-              <div className="mt-3.5 sm:mt-5 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-black/40 border border-white/10 flex flex-col gap-2">
-                <div className="flex items-center justify-between gap-2 flex-wrap">
+            <div className="mt-3.5 sm:mt-5 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-black/50 border border-white/10 flex flex-col gap-3">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-white/50 uppercase text-[9px] sm:text-[11px] tracking-[0.2em] font-semibold">
                     Project Scope & Overview
                   </span>
-                  <span className="text-[#D7E2EA]/70 text-[10px] sm:text-xs uppercase tracking-wider font-mono">
-                    {project.category}
-                  </span>
+                  {project.teamSize && (
+                    <span className="text-emerald-400 text-[10px] sm:text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                      {project.teamSize}
+                    </span>
+                  )}
                 </div>
-                <p className="text-[#D7E2EA]/90 font-light text-xs sm:text-sm leading-relaxed">
+                <span className="text-[#D7E2EA]/70 text-[10px] sm:text-xs uppercase tracking-wider font-mono">
+                  {project.category}
+                </span>
+              </div>
+
+              {project.role && (
+                <div className="text-xs sm:text-sm text-white/90 font-medium">
+                  <span className="text-white/40 uppercase text-[10px] tracking-wider mr-2 font-semibold">Role:</span>
+                  <span>{project.role}</span>
+                </div>
+              )}
+
+              {project.description && (
+                <p className="text-[#D7E2EA]/85 font-light text-xs sm:text-sm leading-relaxed">
                   {project.description}
                 </p>
-              </div>
-            )}
+              )}
+
+              {project.differentials && project.differentials.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1 border-t border-white/10">
+                  {project.differentials.map((diff, dIdx) => (
+                    <span
+                      key={dIdx}
+                      className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-medium uppercase tracking-wider bg-white/5 text-[#D7E2EA]/80 border border-white/10"
+                    >
+                      {diff}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </motion.div>
         </div>
       )}
