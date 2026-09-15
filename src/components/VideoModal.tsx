@@ -140,7 +140,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, project
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/10 text-[#D7E2EA]/80 hover:text-white hover:border-white hover:bg-white/10 transition-all text-xs sm:text-sm uppercase tracking-wider font-medium"
-                  title="Abrir no YouTube"
+                  title="Open on YouTube"
                 >
                   <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span className="hidden sm:inline">YouTube</span>
@@ -151,7 +151,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, project
                   type="button"
                   onClick={onClose}
                   className="p-2 sm:p-2.5 rounded-full border border-white/10 text-[#D7E2EA]/80 hover:text-white hover:border-white hover:bg-white/10 transition-all cursor-pointer"
-                  aria-label="Fechar vídeo"
+                  aria-label="Close video"
                 >
                   <X className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
@@ -202,7 +202,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, project
 
               {project.role && (
                 <div className="text-xs sm:text-sm text-white/90 font-medium">
-                  <span className="text-white/40 uppercase text-[10px] tracking-wider mr-2 font-semibold">Papel:</span>
+                  <span className="text-white/40 uppercase text-[10px] tracking-wider mr-2 font-semibold">Role:</span>
                   <span>{project.role}</span>
                 </div>
               )}
@@ -210,7 +210,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, project
               {project.contributions && project.contributions.length > 0 && (
                 <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
                   <span className="text-white/50 uppercase text-[10px] sm:text-[11px] tracking-wider font-semibold">
-                    O que desenvolvi no projeto:
+                    Key Deliverables & What I Built:
                   </span>
                   <ul className="flex flex-col gap-2">
                     {project.contributions.map((item, idx) => (

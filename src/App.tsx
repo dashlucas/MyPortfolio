@@ -68,16 +68,16 @@ export const App: React.FC = () => {
       {/* Navigation Header */}
       <Navbar />
 
-      {/* 1. Projects Section (O que eu já fiz) */}
+      {/* 1. Projects Section (Interactive Work) */}
       <ProjectsSection />
 
-      {/* 3. ArtStation 3D Showcase (Projetos do ArtStation) */}
+      {/* 2. ArtStation 3D Showcase (Modeling & Shading) */}
       <MarqueeSection />
 
-      {/* 4. Services Section */}
+      {/* 3. Services Section (Technical Expertise) */}
       <ServicesSection />
 
-      {/* 5. About Section (Sobre mim) */}
+      {/* 4. About Section (Bio & Credentials) */}
       <AboutSection />
 
       {/* Contact & Footer Section */}

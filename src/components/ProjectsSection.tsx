@@ -34,18 +34,18 @@ const PROJECTS: ProjectData[] = [
     tag: 'CLIENT',
     name: 'OÁS GT Building',
     category: 'Real Estate VR Arch Viz',
-    teamSize: 'Equipe: 4 pessoas',
-    role: 'Technical Artist & Unreal Engine Developer',
+    teamSize: 'Core Team: 4 devs',
+    role: 'Technical Artist & Unreal Engine 4 Developer',
     contributions: [
-      'Modelagem 3D de assets e criação de kits arquitetônicos modulares para o cenário.',
-      'Programação de sistemas avançados de interação com objetos do ambiente.',
-      'Desenvolvimento e programação de widgets e interface gráfica interativa (UI/UX).',
-      'Melhoria e otimização de pipeline: introdução e demonstração prática do uso do Substance 3D e materiais otimizados para redução drástica de draw calls, evidenciando à equipe o impacto direto na taxa de quadros.',
-      'Implementação e replicação do sistema de interações multiplayer em tempo real.',
+      '3D asset modeling and modular architectural kit creation for real-time environments.',
+      'Advanced object interaction and spatial navigation systems.',
+      'Interactive widget programming and custom UI/UX state architecture.',
+      'Pipeline optimization: introduced Substance 3D and channel-packed materials to dramatically reduce draw calls, demonstrating measurable performance impact to the team.',
+      'Real-time multiplayer interaction systems and network replication.',
     ],
-    differentials: ['Unreal Engine 5', 'Substance 3D Pipeline', 'Draw Calls Optimization', 'Multiplayer Interactions', 'VR Walkthrough'],
+    differentials: ['Unreal Engine 4', 'Substance 3D Pipeline', 'Draw Calls Optimization', 'Multiplayer Interactions', 'VR Walkthrough'],
     description:
-      'Passeio imersivo de arquitetura e visualização imobiliária de alto padrão em Unreal Engine com suporte a VR e multiplayer em tempo real.',
+      'High-end architectural visualization and real estate VR walkthrough in Unreal Engine 4 with real-time multiplayer and standalone VR support.',
     videoId: 'YHwtTnkM8hM',
     videoUrl: 'https://www.youtube.com/watch?v=YHwtTnkM8hM',
     localVideo: './videos/OAS_GTBuilding.mp4',
@@ -60,17 +60,17 @@ const PROJECTS: ProjectData[] = [
     tag: 'COMMERCIAL',
     name: 'Projeto BRX',
     category: 'High-Performance Multiplatform Experience',
-    teamSize: 'Equipe: 6 pessoas',
+    teamSize: 'Core Team: 6 devs',
     role: 'Lead Systems Engineer & Technical Artist',
     contributions: [
-      'Implementação de sistema de interações multiplayer com replicação de rede e sincronização de pawns.',
-      'Sistemas complexos de interação e manipulação de objetos interativos no cenário.',
-      'Sistema de controle, navegação e movimentação fluida desenvolvido especificamente para tablet.',
-      'Sistema de câmeras dedicado para o tablet visualizar, acompanhar e alternar pontos de vista dos clientes em tempo real.',
+      'Multiplayer interaction systems with network replication and pawn state synchronization.',
+      'Comprehensive scene object interaction and prop manipulation mechanics.',
+      'Fluid tablet navigation, camera control, and touch movement system.',
+      'Dedicated tablet spectator camera system to observe, follow, and switch client perspectives in real time.',
     ],
-    differentials: ['Multiplayer Replication', 'Tablet Movement System', 'Client Spectator Cameras', 'Multiplatform (PC/Tablet)', 'Custom UI/UX'],
+    differentials: ['Unreal Engine 5', 'Multiplayer Replication', 'Tablet Movement System', 'Client Spectator Cameras', 'Multiplatform (PC/Tablet)'],
     description:
-      'Experiência interativa multiplataforma de alta performance com sincronização em rede entre PC e tablets para apresentações interativas de vendas.',
+      'High-performance multiplatform real-time experience built in Unreal Engine 5 with network synchronization between PC and tablets for interactive sales presentations.',
     videoId: 'ZCTbNF5RaJw',
     videoUrl: 'https://www.youtube.com/watch?v=ZCTbNF5RaJw',
     localVideo: './videos/BRX.mp4',
@@ -85,15 +85,15 @@ const PROJECTS: ProjectData[] = [
     tag: 'SIMULATION',
     name: 'Projeto Fitmass',
     category: 'VR & Augmented Reality Simulation',
-    teamSize: 'Equipe: 4 pessoas',
+    teamSize: 'Core Team: 4 devs',
     role: 'VR Technical Developer & Level Designer',
     contributions: [
-      'Sistemas de interação e manipulação com objetos em Realidade Virtual com resposta tátil e visual.',
-      'Design do level e composição visual do ambiente espacial voltado para escaneamento e avaliação corporal biométrica.',
+      'Virtual Reality object interaction and spatial manipulation systems with responsive feedback.',
+      'Level design and 3D spatial environment composition tailored for biometric body evaluation and scanning.',
     ],
-    differentials: ['Meta Quest Standalone', 'Level Design', 'Object Interaction System', 'Zero-Latency UX', 'Biometric Simulation'],
+    differentials: ['Unreal Engine 5', 'Meta Quest Standalone', 'Level Design', 'Object Interaction System', 'Biometric Simulation'],
     description:
-      'Sistema de avaliação biométrica corporal em Realidade Virtual e Aumentada em Unreal Engine com avatares em tempo real.',
+      'Virtual and Augmented Reality biometric body evaluation system built in Unreal Engine 5 with real-time 3D avatar visualization.',
     videoId: 'P5yV7_p0bDU',
     videoUrl: 'https://www.youtube.com/watch?v=P5yV7_p0bDU',
     localVideo: './videos/Fitmass.mp4',
@@ -108,18 +108,18 @@ const PROJECTS: ProjectData[] = [
     tag: 'INDUSTRIAL',
     name: 'Fibracem Fábrica',
     category: 'Industrial VR Training & Simulation',
-    teamSize: 'Equipe: 6 pessoas',
+    teamSize: 'Core Team: 6 devs',
     role: 'Lead Interactive Developer & Level Architect',
     contributions: [
-      'Design e layout espacial dos levels fabris simulados em escala real.',
-      'Arquitetura técnica dos levels e montagem de maquinários e linhas de produção industriais.',
-      'Programação de interações físicas e validação rigorosa de procedimentos operacionais de montagem.',
-      'Programação de lógica de level, checklists e condução guiada de fluxo de treinamento.',
-      'Sistema multiplayer para colaboração e treinamento simultâneo de múltiplos operadores.',
+      'Level design and spatial layout for full-scale simulated factory environments.',
+      'Technical level architecture and industrial machinery/assembly line composition.',
+      'Physical interaction programming and strict operational procedure validation.',
+      'Level mechanics, operational task checklists, and guided training workflow logic.',
+      'Multiplayer system for collaborative training across multiple simultaneous operators.',
     ],
-    differentials: ['Industrial VR Training', 'Level Architecture', 'Physical Interaction Systems', 'Multiplayer System', 'Machinery Simulation'],
+    differentials: ['Unreal Engine 5', 'Industrial VR Training', 'Level Architecture', 'Physical Interaction Systems', 'Multiplayer System'],
     description:
-      'Treinamento e simulação industrial interativa em VR para a fábrica da Fibracem, validando processos técnicos de operadores em ambiente virtual seguro.',
+      'Interactive VR factory training and industrial simulation for Fibracem in Unreal Engine 5, validating operator procedures in a safe virtual environment.',
     videoId: 'JgvCpCAwXH4',
     videoUrl: 'https://www.youtube.com/watch?v=JgvCpCAwXH4',
     localVideo: './videos/Fibracem.mp4',
@@ -134,16 +134,16 @@ const PROJECTS: ProjectData[] = [
     tag: 'EXHIBITION',
     name: 'Casacor 2024',
     category: 'Mixed Reality & Spatial Installation',
-    teamSize: 'Equipe: 5 pessoas',
+    teamSize: 'Core Team: 5 creators',
     role: 'Technical Director & XR Engineer',
     contributions: [
-      'Sistema de interações imersivas e espaciais para Realidade Mista (MR) em headsets standalone.',
-      'Programação de lógica e fluxo de level em tempo real sincronizado com a iluminação física do evento.',
-      'Sistema multiplayer para presença compartilhada de múltiplos visitantes simultâneos na instalação.',
+      'Immersive spatial interaction systems for Mixed Reality (MR) on standalone headsets.',
+      'Real-time level mechanics and show flow logic synchronized with venue environmental lighting.',
+      'Spatial multiplayer system enabling shared presence for multiple simultaneous exhibition visitors.',
     ],
-    differentials: ['Mixed Reality (MR)', 'Spatial Interactions', 'Multiplayer Sync', 'Level Programming', 'Live Exhibition Hardware'],
+    differentials: ['Unreal Engine 5', 'Mixed Reality (MR)', 'Spatial Interactions', 'Multiplayer Sync', 'Level Programming'],
     description:
-      'Instalação espacial imersiva em Realidade Mista desenvolvida para a CASACOR Santa Catarina, combinando arquitetura real e virtual.',
+      'Immersive spatial installation in Mixed Reality developed for CASACOR Santa Catarina in Unreal Engine 5, merging physical architecture and virtual zen environments.',
     videoId: 'X16uHRK7ew0',
     videoUrl: 'https://www.youtube.com/watch?v=X16uHRK7ew0',
     localVideo: './videos/Casacor2024.mp4',
@@ -485,14 +485,14 @@ export const ProjectsSection: React.FC = () => {
                             )}
                           </div>
 
-                          {/* Right Column: "O que desenvolvi" / Contributions & Tech Scope Panel */}
+                          {/* Right Column: "What I Developed" / Contributions & Tech Scope Panel */}
                           <div className="w-[48%] flex flex-col h-full min-h-0 bg-black/35 rounded-xl sm:rounded-2xl border border-white/10 p-3 sm:p-4">
                             {/* Panel Header */}
                             <div className="flex items-center justify-between gap-2 pb-2.5 mb-2 border-b border-white/10 flex-shrink-0">
                               <div className="flex items-center gap-1.5 text-emerald-400">
                                 <Wrench className="w-3.5 h-3.5" />
                                 <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider">
-                                  O que desenvolvi no projeto
+                                  What I Developed & Built
                                 </span>
                               </div>
                               <span className="text-[10px] text-white/40 uppercase tracking-widest font-mono">
@@ -509,7 +509,7 @@ export const ProjectsSection: React.FC = () => {
                               {/* Role */}
                               <div className="text-xs text-white/90 font-medium">
                                 <span className="text-white/40 uppercase text-[10px] tracking-wider mr-1.5 font-semibold">
-                                  Papel:
+                                  Role:
                                 </span>
                                 <span>{project.role}</span>
                               </div>
@@ -577,7 +577,7 @@ export const ProjectsSection: React.FC = () => {
                               <div className="flex items-center gap-1.5 text-emerald-400">
                                 <Wrench className="w-3 h-3" />
                                 <span className="text-[11px] font-bold uppercase tracking-wider">
-                                  O que desenvolvi
+                                  What I Developed
                                 </span>
                               </div>
                               <span className="text-[9px] text-white/40 uppercase tracking-widest font-mono">
@@ -593,7 +593,7 @@ export const ProjectsSection: React.FC = () => {
                             >
                               <div className="text-[11px] text-white/90 font-medium">
                                 <span className="text-white/40 uppercase text-[9px] tracking-wider mr-1 font-semibold">
-                                  Papel:
+                                  Role:
                                 </span>
                                 <span>{project.role}</span>
                               </div>
