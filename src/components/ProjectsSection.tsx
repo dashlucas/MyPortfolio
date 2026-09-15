@@ -73,9 +73,9 @@ const PROJECTS: ProjectData[] = [
     videoUrl: 'https://www.youtube.com/watch?v=ZCTbNF5RaJw',
     localVideo: './videos/BRX.mp4',
     images: {
-      col1Top: './projects/brx_interior.jpg',
-      col1Bottom: './projects/brx_tablet.jpg',
-      col2Tall: './projects/brx_view.jpg',
+      col1Top: './projects/brx_render_balcony.webp',
+      col1Bottom: './projects/brx_render_kitchen.webp',
+      col2Tall: './projects/brx_render_living.webp',
     },
   },
   {
