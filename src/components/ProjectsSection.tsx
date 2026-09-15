@@ -163,6 +163,16 @@ interface ScaleConfig {
   renderedH: number;
 }
 
+const getNavHeight = (): number => {
+  if (typeof window === 'undefined') return 80;
+  const header = document.querySelector('header');
+  if (header) {
+    const rect = header.getBoundingClientRect();
+    if (rect.height > 0) return Math.round(rect.height);
+  }
+  return window.innerWidth < 640 ? 64 : 80;
+};
+
 const getScaleConfig = (): ScaleConfig => {
   if (typeof window === 'undefined') {
     return {
@@ -178,6 +188,8 @@ const getScaleConfig = (): ScaleConfig => {
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
+  const navH = getNavHeight();
+
   // Landscape is active on screens with adequate width or when horizontal width dominates
   const isLandscape = vw >= 768 || (vw > vh && vw >= 560);
   const isMobile = !isLandscape;
@@ -186,15 +198,20 @@ const getScaleConfig = (): ScaleConfig => {
     // Mobile / Portrait view: vertical stack (Media top, Contributions bottom)
     const paddingX = 20;
     const baseW = Math.min(Math.max(290, vw - paddingX), 440);
-    const baseH = Math.min(Math.max(500, vh - 120), 620);
+    // Vertical available space strictly between navbar and screen bottom with padding
+    const paddingY = 16;
+    const availH = Math.max(380, vh - navH - paddingY * 2);
+    const baseH = Math.min(availH, 590);
+    const scale = Math.min(1.0, availH / baseH);
+
     return {
       isMobile: true,
       isLandscape: false,
       baseW,
       baseH,
-      scale: 1,
-      renderedW: baseW,
-      renderedH: baseH,
+      scale,
+      renderedW: Math.round(baseW * scale),
+      renderedH: Math.round(baseH * scale),
     };
   }
 
@@ -202,9 +219,10 @@ const getScaleConfig = (): ScaleConfig => {
   const baseW = 1080;
   const baseH = 510;
   const paddingX = vw < 1140 ? 32 : 48;
-  const paddingY = vh < 660 ? 20 : 36;
+  // Available height strictly between the top navbar and the bottom of the screen
+  const paddingY = vh < 700 ? 16 : (vh < 860 ? 24 : 32);
   const availW = Math.max(680, vw - paddingX);
-  const availH = Math.max(400, vh - paddingY);
+  const availH = Math.max(340, vh - navH - paddingY * 2);
   const scale = Math.min(availW / baseW, availH / baseH, 1.0);
 
   return {
@@ -295,11 +313,14 @@ export const ProjectsSection: React.FC = () => {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // Calculate topOffset to center the card vertically in the user's viewport
+      // Calculate topOffset to center the card vertically in the space between navbar and screen bottom
       const getTopOffset = () => {
         const vh = window.innerHeight;
+        const navH = getNavHeight();
         const currentRenderedH = scaleConfigRef.current.renderedH;
-        return Math.max(16, Math.round((vh - currentRenderedH) / 2));
+        const spaceBetween = vh - navH;
+        const verticalMargin = Math.max(12, Math.round((spaceBetween - currentRenderedH) / 2));
+        return navH + verticalMargin;
       };
 
       const endTriggerEl = endSpacerRef.current;
@@ -358,7 +379,14 @@ export const ProjectsSection: React.FC = () => {
       ScrollTrigger.refresh();
     }, sectionRef);
 
-    return () => ctx.revert();
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
+
+    return () => {
+      clearTimeout(timer);
+      ctx.revert();
+    };
   }, [scaleConfig.isMobile, scaleConfig.isLandscape]);
 
   // Dedicated wheel listener that stops event propagation and scrolls internal container effortlessly
