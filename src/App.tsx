@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import 'lenis/dist/lenis.css';
 import { Navbar } from './components/Navbar';
-import { MarqueeSection } from './components/MarqueeSection';
+import { PersonalProjectsSection } from './components/PersonalProjectsSection';
 import { AboutSection } from './components/AboutSection';
 import { ProjectsSection } from './components/ProjectsSection';
 import { ContactButton } from './components/ContactButton';
@@ -73,8 +73,8 @@ export const App: React.FC = () => {
       {/* 2. Projects Section (Interactive Work) */}
       <ProjectsSection />
 
-      {/* 3. ArtStation 3D Showcase (Modeling & Shading) */}
-      <MarqueeSection />
+      {/* 3. Personal Projects & 3D Studies (ArtStation Studies Showcase) */}
+      <PersonalProjectsSection />
 
       {/* Contact & Footer Section */}
       <footer id="contact" className="relative bg-[#0C0C0C] text-[#D7E2EA] px-4 sm:px-6 md:px-10 py-16 sm:py-24 md:py-32 border-t border-white/10 select-none">
