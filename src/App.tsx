@@ -6,7 +6,6 @@ import 'lenis/dist/lenis.css';
 import { Navbar } from './components/Navbar';
 import { MarqueeSection } from './components/MarqueeSection';
 import { AboutSection } from './components/AboutSection';
-import { SkillsSection } from './components/SkillsSection';
 import { ProjectsSection } from './components/ProjectsSection';
 import { ContactButton } from './components/ContactButton';
 import { FadeIn } from './components/FadeIn';
@@ -36,7 +35,7 @@ export const App: React.FC = () => {
     gsap.ticker.add(tickerUpdate);
     gsap.ticker.lagSmoothing(0);
 
-    // Smooth navigation for in-page anchor links (#about, #skills, #projects, #contact, #artstation)
+    // Smooth navigation for in-page anchor links (#about, #projects, #contact, #artstation)
     const handleAnchorClick = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest('a');
       if (!target) return;
@@ -68,16 +67,13 @@ export const App: React.FC = () => {
       {/* Navigation Header */}
       <Navbar />
 
-      {/* 1. About Section (Bio, Credentials & Availability) - Top of the page */}
+      {/* 1. About Section (Bio, Technical Services & Skills - All in one concise section) */}
       <AboutSection />
 
-      {/* 2. Skills Section (Technical Skills & Production Pillars - Justice Shultz inspired) */}
-      <SkillsSection />
-
-      {/* 3. Projects Section (Interactive Work) */}
+      {/* 2. Projects Section (Interactive Work) */}
       <ProjectsSection />
 
-      {/* 4. ArtStation 3D Showcase (Modeling & Shading) */}
+      {/* 3. ArtStation 3D Showcase (Modeling & Shading) */}
       <MarqueeSection />
 
       {/* Contact & Footer Section */}
