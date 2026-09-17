@@ -6,10 +6,10 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
+    { label: 'About Me', href: '#about' },
+    { label: 'Skills', href: '#skills' },
     { label: 'Projects', href: '#projects' },
     { label: '3D Art', href: '#artstation' },
-    { label: 'Services', href: '#services' },
-    { label: 'About Me', href: '#about' },
     { label: 'Contact', href: '#contact' },
   ];
 
@@ -23,7 +23,7 @@ export const Navbar: React.FC = () => {
         {/* Brand / Name + Status */}
         <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           <a
-            href="#projects"
+            href="#about"
             className="flex items-center gap-2.5 text-white group"
           >
             <span className="font-black text-sm xs:text-base sm:text-lg tracking-wider uppercase group-hover:text-white transition-colors">

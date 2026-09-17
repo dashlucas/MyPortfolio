@@ -19,7 +19,7 @@ export const AboutSection: React.FC = () => {
   return (
     <section
       id="about"
-      className="relative min-h-screen flex flex-col justify-center items-center px-4 sm:px-8 md:px-10 py-20 sm:py-28 md:py-36 bg-[#0C0C0C] rounded-t-[32px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-8 sm:-mt-12 md:-mt-14 z-20 overflow-hidden select-none shadow-[0_-20px_50px_rgba(0,0,0,0.8)]"
+      className="relative min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-8 md:px-10 pt-8 sm:pt-12 md:pt-16 pb-20 sm:pb-28 md:pb-32 bg-[#0C0C0C] z-20 overflow-hidden select-none"
     >
       {/* Corner Decorative 3D Images (Scaled and hidden on narrow screens to prevent text overlap) */}
 
